@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Mastery: Essential Skills Workshop</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-color: #1f2937;
+            --light-bg: #f8fafc;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #ffffff 100%);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        .presentation {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            padding: 3rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #6b7280;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .content {
+            font-size: 1.25rem;
+            line-height: 1.8;
+        }
+
+        ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        li {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 1rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .command {
+            color: #4ade80;
+        }
+
+        .comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .workflow-step {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .vs-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .bad-example {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .good-example {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .vs-divider {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            color: var(--text-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .speaker-notes {
+            display: none;
+            position: fixed;
+            bottom: 8rem;
+            left: 2rem;
+            right: 2rem;
+            background: rgba(30, 41, 59, 0.95);
+            color: var(--code-text);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            line-height: 1.6;
+            backdrop-filter: blur(20px);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .speaker-notes.visible {
+            display: block;
+        }
+
+        .title-slide {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .objectives {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .key-takeaway {
+            background: linear-gradient(135deg, var(--success-color) 0%, #059669 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 2rem;
+                width: 95%;
+                height: 85vh;
+            }
+            
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .content { font-size: 1.1rem; }
+            .two-column { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            .slide { 
+                display: block !important; 
+                page-break-after: always;
+                width: 100%;
+                height: auto;
+                box-shadow: none;
+                margin: 0;
+            }
+            .navigation, .slide-counter, .progress-bar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title & Workshop Overview -->
+        <div class="slide active title-slide">
+            <h1>Claude Code Mastery</h1>
+            <p class="subtitle">Essential Skills Workshop</p>
+            <div class="objectives">
+                <h3>What You'll Master in 90 Minutes:</h3>
+                <ul>
+                    <li>Setup and first productive session</li>
+                    <li>Essential workflows and patterns</li>
+                    <li>Security and permission management</li>
+                    <li>Troubleshooting and optimization</li>
+                </ul>
+            </div>
+            <p class="content"><strong>Goal:</strong> Get productive with Claude Code immediately</p>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> Welcome everyone to the Claude Code workshop. This is designed to get you productive quickly. We'll cover everything from installation to advanced patterns. By the end, you'll be able to use Claude Code effectively on your projects. The focus is practical - every slide has actionable takeaways.
+            </div>
+        </div>
+
+        <!-- Slide 2: Philosophy & Why Claude Code -->
+        <div class="slide">
+            <h2>Philosophy & Why Claude Code</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Design Philosophy</h3>
+                    <ul>
+                        <li><span class="highlight">Unopinionated</span> - No forced workflows</li>
+                        <li><span class="highlight">Low-level</span> - Direct model access</li>
+                        <li><span class="highlight">Unix Philosophy</span> - Composable tools</li>
+                        <li><span class="highlight">Safety First</span> - Conservative permissions</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Why Choose Claude Code?</h3>
+                    <ul>
+                        <li>Raw model intelligence</li>
+                        <li>Scriptable and automation-friendly</li>
+                        <li>Integrates with existing workflows</li>
+                        <li>Grows with your expertise</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="key-takeaway">
+                <strong>Key Insight:</strong> "We don't know what the right UX is yet, so we're starting simple" - Boris (Creator)
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> Claude Code's philosophy is different from other AI coding tools. It's intentionally simple and flexible. Boris, the creator, designed it to be unopinionated because the field is moving so fast. This means you get raw access to Claude's capabilities without layers of abstraction. The Unix philosophy means it plays well with other tools.
+            </div>
+        </div>
+
+        <!-- Slide 3: Getting Started -->
+        <div class="slide">
+            <h2>Getting Started - Installation & First Steps</h2>
+            <div class="code-block">
+<span class="comment"># Install Claude Code globally</span>
+<span class="command">npm install -g @anthropic-ai/claude-code</span>
+
+<span class="comment"># Navigate to your project</span>
+<span class="command">cd your-awesome-project</span>
+
+<span class="comment"># Start your first session</span>
+<span class="command">claude</span>
+
+<span class="comment"># Initialize project memory</span>
+<span class="command">/init</span>
+            </div>
+            <h3>Essential Keyboard Shortcuts</h3>
+            <ul>
+                <li><span class="highlight">Ctrl+C</span> - Cancel current operation</li>
+                <li><span class="highlight">Ctrl+D</span> - Exit Claude session</li>
+                <li><span class="highlight">Escape</span> - Interrupt Claude mid-action</li>
+                <li><span class="highlight">Double Escape</span> - Edit previous prompt</li>
+            </ul>
+            <div class="workflow-step">
+                <strong>Permission Strategy:</strong> Start conservative, add permissions as you build trust and understanding
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> Installation is straightforward with npm. The /init command creates your first CLAUDE.md file. These keyboard shortcuts are crucial - Escape lets you interrupt Claude if it's going in the wrong direction. Double Escape is powerful for editing your previous prompt. Start with minimal permissions and expand as needed.
+            </div>
+        </div>
+
+        <!-- Slide 4: CLAUDE.md - Your Project Memory -->
+        <div class="slide">
+            <h2>CLAUDE.md - Your Project Memory</h2>
+            <h3>File Hierarchy (Priority Order)</h3>
+            <ul>
+                <li><span class="highlight">./CLAUDE.md</span> - Project root (team shared)</li>
+                <li><span class="highlight">./subdir/CLAUDE.md</span> - Directory specific</li>
+                <li><span class="highlight">~/.claude/CLAUDE.md</span> - Global user settings</li>
+            </ul>
+            
+            <div class="code-block">
+<span class="comment"># Essential CLAUDE.md Content</span>
+
+## Build Commands
+- npm run dev: Start development server
+- npm test: Run tests  
+- npm run lint: Must pass before commits
+
+## Code Style
+- Use TypeScript for all new files
+- Follow existing naming conventions
+- Add JSDoc comments for public functions
+
+## Architecture
+<span class="command">@./docs/architecture.md</span>  <span class="comment"># Import other files</span>
+            </div>
+            
+            <div class="key-takeaway">
+                <strong>Pro Tip:</strong> Keep CLAUDE.md concise and actionable. It becomes part of Claude's context automatically.
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> CLAUDE.md is your project's memory system. The hierarchy means more specific files override general ones. The @ syntax lets you import other files. Keep the main file focused on essential daily info. The architecture import example shows how to modularize larger documentation.
+            </div>
+        </div>
+
+        <!-- Slide 5: Core Workflow Pattern -->
+        <div class="slide">
+            <h2>Core Workflow Pattern</h2>
+            <div class="workflow-step">
+                <h3>🔍 Explore → 📋 Plan → 💻 Code → ✅ Verify</h3>
+                <p>This pattern prevents Claude from jumping straight to coding without understanding context</p>
+            </div>
+
+            <h3>Be Specific in Your Prompts</h3>
+            <div class="vs-comparison">
+                <div class="bad-example">
+                    <strong>❌ Poor:</strong><br>
+                    "Add error handling"
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="good-example">
+                    <strong>✅ Good:</strong><br>
+                    "Add error handling for the user registration endpoint that catches duplicate email errors and returns a user-friendly message with status code 409"
+                </div>
+            </div>
+
+            <h3>Context Management</h3>
+            <ul>
+                <li>Use <span class="highlight">/clear</span> between unrelated tasks</li>
+                <li>Provide visual context: screenshots, mockups, diagrams</li>
+                <li>Reference specific files with <span class="highlight">@filename</span></li>
+                <li>Split complex tasks into focused sessions</li>
+            </ul>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> The four-step workflow is crucial. Explore first to understand the codebase. Plan before coding. The specificity example shows how detailed prompts dramatically improve results. Context management with /clear prevents confusion between unrelated tasks. Visual context like screenshots are incredibly powerful.
+            </div>
+        </div>
+
+        <!-- Slide 6: Permission Management & Security -->
+        <div class="slide">
+            <h2>Permission Management & Security</h2>
+            <h3>Permission Hierarchy (Highest to Lowest)</h3>
+            <ul>
+                <li>Enterprise policies (managed by IT)</li>
+                <li>Command line arguments</li>
+                <li>Local project settings</li>
+                <li>User settings</li>
+            </ul>
+
+            <div class="code-block">
+<span class="comment"># Essential Permission Commands</span>
+<span class="command">/permissions add Edit</span>          <span class="comment"># Allow file editing</span>
+<span class="command">/permissions add Bash(git:*)</span>    <span class="comment"># Git operations</span>
+<span class="command">/permissions add Bash(npm:test)</span> <span class="comment"># Testing only</span>
+<span class="command">/permissions list</span>              <span class="comment"># View current permissions</span>
+
+<span class="comment"># CLI override (session only)</span>
+<span class="command">claude --allowedTools Edit,Bash</span>
+            </div>
+
+            <div class="two-column">
+                <div class="good-example">
+                    <strong>✅ Safe Permissions:</strong>
+                    <ul>
+                        <li>Edit, Read</li>
+                        <li>Bash(git:*)</li>
+                        <li>Bash(npm:test)</li>
+                        <li>Bash(npm:lint)</li>
+                    </ul>
+                </div>
+                <div class="bad-example">
+                    <strong>❌ Avoid in Production:</strong>
+                    <ul>
+                        <li>Bash(*) - Too broad</li>
+                        <li>Bash(rm:*) - Dangerous</li>
+                        <li>Bash(curl:*) - Network access</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> Security is built into Claude Code through the permission system. Start with safe permissions and add more as needed. Enterprise policies can enforce security standards. The CLI override is useful for scripting. Never use overly broad permissions like Bash(*) in production environments.
+            </div>
+        </div>
+
+        <!-- Slide 7: Advanced Patterns -->
+        <div class="slide">
+            <h2>Advanced Patterns - Multi-Claude & Automation</h2>
+            <h3>Multi-Claude Orchestration</h3>
+            <div class="two-column">
+                <div>
+                    <h4>Specialized Roles:</h4>
+                    <ul>
+                        <li><strong>Terminal 1:</strong> Development work</li>
+                        <li><strong>Terminal 2:</strong> Testing & review</li>
+                        <li><strong>Terminal 3:</strong> Documentation</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Git Worktrees:</h4>
+                    <div class="code-block">
+<span class="command">git worktree add ../project-feature feature</span>
+<span class="command">cd ../project-feature && claude</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Custom Slash Commands</h3>
+            <div class="code-block">
+<span class="comment"># Create .claude/commands/fix-issue.md</span>
+Please analyze and fix GitHub issue #$ARGUMENTS.
+1. Use `gh issue view $ARGUMENTS` to get details
+2. Search codebase for relevant files  
+3. Implement fix with tests
+4. Create descriptive commit
+
+<span class="comment"># Usage:</span>
+<span class="command">/project:fix-issue 123</span>
+            </div>
+
+            <h3>Thinking Modes</h3>
+            <ul>
+                <li><span class="highlight">"think"</span> → Quick analysis</li>
+                <li><span class="highlight">"think hard"</span> → Architecture decisions</li>
+                <li><span class="highlight">"ultrathink"</span> → Maximum analysis</li>
+            </ul>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> Advanced patterns dramatically increase productivity. Multi-Claude lets you work on different aspects simultaneously. Git worktrees enable parallel feature development. Custom slash commands create reusable workflows. Thinking modes let you control how much analysis Claude does - use strategically based on complexity.
+            </div>
+        </div>
+
+        <!-- Slide 8: Performance & Context Optimization -->
+        <div class="slide">
+            <h2>Performance & Context Optimization</h2>
+            <h3>Context Window Management</h3>
+            <ul>
+                <li>Use <span class="highlight">/clear</span> frequently between tasks</li>
+                <li>Split large tasks into focused sessions</li>
+                <li>Use multiple Claude instances for complex work</li>
+                <li>Monitor for "context window" warnings</li>
+            </ul>
+
+            <h3>Optimized CLAUDE.md Structure</h3>
+            <div class="code-block">
+<span class="comment"># CRITICAL INFO (always needed)</span>
+- Build command: npm run build
+- Test command: npm test  
+- Linting: npm run lint (MUST pass)
+
+<span class="comment"># IMPORTS (pull in as needed)</span>
+@./docs/architecture.md
+@./standards/coding-style.md
+
+<span class="comment"># CONTEXT-SPECIFIC (loaded on demand)</span>
+@./frontend/patterns.md
+@./backend/database-patterns.md
+            </div>
+
+            <h3>Performance Anti-patterns</h3>
+            <div class="bad-example">
+                <ul>
+                    <li>Massive single CLAUDE.md files (200+ lines)</li>
+                    <li>Working in one session for hours</li>
+                    <li>Including rarely-needed documentation</li>
+                    <li>Not using /clear between unrelated tasks</li>
+                </ul>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> Performance is about managing Claude's context window effectively. Use /clear liberally - it's like giving Claude a fresh start. Structure your CLAUDE.md with priority - critical info first, then imports for detailed info. The anti-patterns section shows what kills performance.
+            </div>
+        </div>
+
+        <!-- Slide 9: Troubleshooting & Recovery -->
+        <div class="slide">
+            <h2>Troubleshooting & Recovery</h2>
+            <h3>Common Issues & Solutions</h3>
+            <div class="two-column">
+                <div>
+                    <h4>Context Issues:</h4>
+                    <ul>
+                        <li><strong>Context full:</strong> Use <span class="highlight">/clear</span></li>
+                        <li><strong>Slow responses:</strong> Check connection</li>
+                        <li><strong>Wrong context:</strong> Start fresh session</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Permission Issues:</h4>
+                    <ul>
+                        <li>Check <span class="highlight">/permissions list</span></li>
+                        <li>Add needed permissions</li>
+                        <li>Use CLI override for testing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Recovery Strategies</h3>
+            <div class="workflow-step">
+                <ol>
+                    <li><strong>Interrupt:</strong> Press Escape to stop</li>
+                    <li><strong>Redirect:</strong> "Try a different approach using..."</li>
+                    <li><strong>Undo:</strong> "Undo the last changes"</li>
+                    <li><strong>Reset:</strong> <span class="highlight">git checkout -- filename</span></li>
+                </ol>
+            </div>
+
+            <h3>Debug Commands</h3>
+            <div class="code-block">
+<span class="command">claude --verbose</span>      <span class="comment"># Detailed logging</span>
+<span class="command">claude --mcp-debug</span>   <span class="comment"># MCP troubleshooting</span>
+<span class="command">time claude -p "..."</span> <span class="comment"># Performance timing</span>
+            </div>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> Everyone will hit issues - this slide gives you the tools to recover quickly. Escape is your friend for interrupting Claude. The recovery strategies are in order of preference. Debug commands help diagnose issues. Remember: mistakes are learning opportunities for both you and Claude.
+            </div>
+        </div>
+
+        <!-- Slide 10: Best Practices Summary & Next Steps -->
+        <div class="slide">
+            <h2>Best Practices Summary & Next Steps</h2>
+            <h3>Key Takeaways - Start Using Today</h3>
+            <ul>
+                <li><span class="highlight">Start Simple:</span> Begin with Q&A, then add complexity</li>
+                <li><span class="highlight">Be Specific:</span> Detailed instructions = better results</li>
+                <li><span class="highlight">Use Visual Context:</span> Screenshots and mockups work wonders</li>
+                <li><span class="highlight">Trust the Model:</span> Don't over-engineer solutions</li>
+                <li><span class="highlight">Manage Context:</span> Use /clear frequently</li>
+            </ul>
+
+            <h3>Progressive Mastery Path</h3>
+            <div class="workflow-step">
+                <strong>Beginner</strong> (Week 1) → Codebase Q&A, basic workflows<br>
+                <strong>Intermediate</strong> (Month 1) → Custom commands, memory optimization<br>
+                <strong>Advanced</strong> (Month 3) → Multi-Claude patterns, automation<br>
+                <strong>Expert</strong> (Ongoing) → Enterprise patterns, custom MCP servers
+            </div>
+
+            <div class="key-takeaway">
+                <strong>Call to Action:</strong> Try Claude Code on your next feature. Start with a simple CLAUDE.md file and the Explore → Plan → Code → Verify workflow.
+            </div>
+
+            <h3>Resources & Next Steps</h3>
+            <ul>
+                <li>Documentation: docs.anthropic.com/claude-code</li>
+                <li>Community patterns and examples</li>
+                <li>Experiment with your use cases</li>
+                <li>Share discoveries with your team</li>
+            </ul>
+            <div class="speaker-notes">
+                <strong>Speaker Notes:</strong> This summary gives them immediate action items. The progressive path shows how to grow their skills over time. The call to action is specific - try it on their next feature. Emphasize that the field is moving fast, so continuous experimentation is key. Thank them for their time and encourage questions.
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-bar"></div>
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
+    </div>
+    
+    <div class="navigation">
+        <button class="nav-btn" id="prev-btn">← Previous</button>
+        <button class="nav-btn" id="next-btn">Next →</button>
+    </div>
+
+    <div class="speaker-notes" id="speaker-notes"></div>
+
+    <script>
+        class Presentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.totalSlides = this.slides.length;
+                this.speakerNotesVisible = false;
+                
+                this.initializeNavigation();
+                this.setupKeyboardShortcuts();
+                this.updateDisplay();
+                
+                document.getElementById('total-slides').textContent = this.totalSlides;
+            }
+
+            initializeNavigation() {
+                document.getElementById('prev-btn').addEventListener('click', () => this.previousSlide());
+                document.getElementById('next-btn').addEventListener('click', () => this.nextSlide());
+            }
+
+            setupKeyboardShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowRight':
+                        case ' ':
+                            e.preventDefault();
+                            this.nextSlide();
+                            break;
+                        case 'ArrowLeft':
+                            e.preventDefault();
+                            this.previousSlide();
+                            break;
+                        case 'Home':
+                            e.preventDefault();
+                            this.goToSlide(0);
+                            break;
+                        case 'End':
+                            e.preventDefault();
+                            this.goToSlide(this.totalSlides - 1);
+                            break;
+                        case 'Escape':
+                            e.preventDefault();
+                            this.goToSlide(0);
+                            break;
+                        case 's':
+                        case 'S':
+                            e.preventDefault();
+                            this.toggleSpeakerNotes();
+                            break;
+                    }
+                });
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.totalSlides - 1) {
+                    this.currentSlide++;
+                    this.updateDisplay();
+                }
+            }
+
+            previousSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;  
+                    this.updateDisplay();
+                }
+            }
+
+            goToSlide(index) {
+                if (index >= 0 && index < this.totalSlides) {
+                    this.currentSlide = index;
+                    this.updateDisplay();
+                }
+            }
+
+            updateDisplay() {
+                // Update slides
+                this.slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === this.currentSlide);
+                });
+
+                // Update navigation buttons
+                document.getElementById('prev-btn').disabled = this.currentSlide === 0;
+                document.getElementById('next-btn').disabled = this.currentSlide === this.totalSlides - 1;
+
+                // Update progress bar
+                const progress = ((this.currentSlide + 1) / this.totalSlides) * 100;
+                document.querySelector('.progress-bar').style.width = progress + '%';
+
+                // Update slide counter
+                document.getElementById('current-slide').textContent = this.currentSlide + 1;
+
+                // Update speaker notes
+                this.updateSpeakerNotes();
+            }
+
+            toggleSpeakerNotes() {
+                this.speakerNotesVisible = !this.speakerNotesVisible;
+                const notesElement = document.getElementById('speaker-notes');
+                notesElement.classList.toggle('visible', this.speakerNotesVisible);
+                this.updateSpeakerNotes();
+            }
+
+            updateSpeakerNotes() {
+                if (this.speakerNotesVisible) {
+                    const currentSlideElement = this.slides[this.currentSlide];
+                    const notesElement = currentSlideElement.querySelector('.speaker-notes');
+                    const speakerNotesDisplay = document.getElementById('speaker-notes');
+                    
+                    if (notesElement) {
+                        speakerNotesDisplay.innerHTML = notesElement.innerHTML;
+                    } else {
+                        speakerNotesDisplay.innerHTML = '<strong>No speaker notes for this slide.</strong>';
+                    }
+                }
+            }
+        }
+
+        // Initialize presentation when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new Presentation();
+        });
+
+        // Print support
+        window.addEventListener('beforeprint', () => {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.style.display = 'block';
+            });
+        });
+
+        window.addEventListener('afterprint', () => {
+            // Re-initialize after printing
+            setTimeout(() => new Presentation(), 100);
+        });
+    </script>
+</body>
+</html>

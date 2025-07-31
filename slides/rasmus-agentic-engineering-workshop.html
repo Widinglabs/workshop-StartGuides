@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Engineering Workshop - Rasmus Widing</title>
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --warm-blue: #3b82f6;
+            --light-blue: #93c5fd;
+            --energetic-orange: #f97316;
+            --bright-orange: #fb923c;
+            --success-green: #10b981;
+            --light-green: #6ee7b7;
+            --dark-gray: #1f2937;
+            --medium-gray: #6b7280;
+            --light-gray: #f3f4f6;
+            --white: #ffffff;
+            --shadow: 0 10px 25px rgba(0,0,0,0.1);
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 50%, var(--light-green) 100%);
+            color: var(--dark-gray);
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100px);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, var(--primary-blue), var(--energetic-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--dark-gray);
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--medium-gray);
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .content-area {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .interactive-prompt {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            border-left: 6px solid var(--energetic-orange);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: var(--shadow); }
+            50% { box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3); }
+        }
+
+        .interactive-prompt h3 {
+            color: var(--energetic-orange);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .energy-exercise {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .exercise-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border-top: 4px solid var(--success-green);
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-item:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--energetic-orange);
+        }
+
+        .timeline-role {
+            background: var(--warm-blue);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .comparison-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .comparison-card.left {
+            border-left: 6px solid var(--primary-blue);
+        }
+
+        .comparison-card.right {
+            border-left: 6px solid var(--energetic-orange);
+        }
+
+        .capability-graph {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            position: relative;
+            height: 300px;
+        }
+
+        .graph-line {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            right: 50px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--energetic-orange), var(--success-green));
+            border-radius: 2px;
+        }
+
+        .pyramid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .pyramid-level {
+            background: var(--white);
+            margin: 0.5rem 0;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .pyramid-level:hover {
+            transform: scale(1.05);
+        }
+
+        .pyramid-level:nth-child(1) { width: 80%; background: linear-gradient(135deg, var(--primary-blue), var(--warm-blue)); color: var(--white); }
+        .pyramid-level:nth-child(2) { width: 85%; background: linear-gradient(135deg, var(--warm-blue), var(--light-blue)); }
+        .pyramid-level:nth-child(3) { width: 90%; background: linear-gradient(135deg, var(--light-blue), var(--energetic-orange)); }
+        .pyramid-level:nth-child(4) { width: 95%; background: linear-gradient(135deg, var(--energetic-orange), var(--success-green)); }
+
+        .context-triangle {
+            width: 300px;
+            height: 300px;
+            margin: 2rem auto;
+            position: relative;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .triangle-svg {
+            width: 200px;
+            height: 200px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: left;
+        }
+
+        .feature-card .checkmark {
+            color: var(--success-green);
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        .validation-loop {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .loop-item {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 50%;
+            margin: 0 1rem;
+            box-shadow: var(--shadow);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--primary-blue);
+            position: relative;
+        }
+
+        .loop-item:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            font-size: 1.5rem;
+            color: var(--energetic-orange);
+        }
+
+        .calculator {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .calculator input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light-blue);
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+
+        .calculator-result {
+            background: var(--success-green);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .exercise-box {
+            background: var(--light-green);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            border: 3px dashed var(--success-green);
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .timer {
+            display: inline-flex;
+            align-items: center;
+            background: var(--energetic-orange);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+
+        .timer.running {
+            animation: timer-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes timer-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-btn:hover {
+            background: var(--warm-blue);
+            transform: scale(1.1);
+        }
+
+        .nav-btn:disabled {
+            background: var(--medium-gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--energetic-orange);
+            transition: width 0.5s ease;
+            z-index: 1000;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .poll-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .poll-option {
+            background: var(--white);
+            border: 3px solid var(--light-blue);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .poll-option:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .poll-option.selected {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        .quote {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            border-left: 6px solid var(--success-green);
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        .demo-space {
+            background: var(--dark-gray);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .demo-space::before {
+            content: 'LIVE DEMO SPACE';
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .timeline { flex-direction: column; gap: 1rem; }
+            .timeline-item:not(:last-child)::after { 
+                content: '↓'; 
+                position: static; 
+                display: block; 
+                margin: 0.5rem 0;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .navigation, .slide-counter, .progress-bar { display: none; }
+            .slide { 
+                position: relative !important; 
+                opacity: 1 !important; 
+                visibility: visible !important; 
+                transform: none !important;
+                page-break-after: always;
+                height: auto;
+                padding: 1rem;
+            }
+            .slide.active { page-break-before: avoid; }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bounce-in {
+            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="slide-counter" id="slideCounter">1 / 15</div>
+
+        <!-- Slide 1: Welcome Screen -->
+        <div class="slide active" id="slide1">
+            <div class="content-area">
+                <h1 class="bounce-in">Agentic Engineering Workshop</h1>
+                <p class="subtitle">From Product Manager to AI Engineer: A Journey Anyone Can Take</p>
+                
+                <div class="interactive-prompt">
+                    <h3>🚀 Let's Start Interactive</h3>
+                    <p>Add your name and favorite AI tool to our shared board</p>
+                    <p style="color: var(--medium-gray); margin-top: 1rem;">💡 We'll use this energy throughout our workshop</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Slide 2: Interactive Opening - Energy Setting -->
+        <div class="slide" id="slide2">
+            <div class="content-area">
+                <h2>Let's Get to Know Each Other</h2>
+                
+                <div class="energy-exercise">
+                    <div class="exercise-card">
+                        <h3>30-Second Intros</h3>
+                        <p><strong>Share:</strong> Name, role, last time AI surprised you</p>
+                        <div class="timer" onclick="startTimer(this, 30)">⏱ Start 30s Timer</div>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h3>💰 STAND UP Challenge</h3>
+                        <p><strong>Stand up if:</strong> You've spent $100+ on AI tools this month</p>
+                    </div>
+                    
+                    <div class="exercise-card">
+                        <h3>💸 Stay Standing If...</h3>
+                        <p><strong>Keep standing if:</strong> You wish you got more value from that spend</p>
+                        <p style="color: var(--success-green); font-weight: 600;">This workshop is for YOU!</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <div style="background: var(--light-green); padding: 1rem; border-radius: var(--border-radius); display: inline-block;">
+                        <strong>Energy Check:</strong> How's everyone feeling? 👍👎
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: My Journey - Career Timeline -->
+        <div class="slide" id="slide3">
+            <div class="content-area">
+                <h2>From PM to Agentic Engineer: An Unexpected Path</h2>
+                
+                <div class="timeline fade-in">
+                    <div class="timeline-item">
+                        <div class="timeline-role">QA</div>
+                        <p>Testing mindset</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-role">PM</div>
+                        <p>Requirements & stakeholders</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-role">Business Analyst</div>
+                        <p>Problem decomposition</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-role" style="background: var(--energetic-orange);">Agentic Engineer</div>
+                        <p>AI orchestration</p>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    <p><strong>Key Insight:</strong> PM skills translate surprisingly well to AI engineering</p>
+                </div>
+
+                <div class="interactive-prompt">
+                    <h3>🙋‍♀️ Interactive Poll</h3>
+                    <p><strong>Who here comes from non-traditional engineering backgrounds?</strong></p>
+                    <p>You might have an advantage you don't know about yet!</p>
+                </div>
+
+                <div style="margin-top: 1rem; color: var(--medium-gray); text-align: center;">
+                    <p>📍 Experience with: Bolt, Pipedrive, Monese + other startups → AI Engineering Focus</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: The PM Advantage -->
+        <div class="slide" id="slide4">
+            <div class="content-area">
+                <h2>Why PM Skills = AI Engineering Superpowers</h2>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card left">
+                        <h3>Product Requirements Document (PRD)</h3>
+                        <ul style="text-align: left; margin-top: 1rem;">
+                            <li>Clear problem statement</li>
+                            <li>Success criteria</li>
+                            <li>User stories</li>
+                            <li>Acceptance criteria</li>
+                            <li>Dependencies</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-card right">
+                        <h3>AI Prompt (PRP)</h3>
+                        <ul style="text-align: left; margin-top: 1rem;">
+                            <li>Clear goal definition</li>
+                            <li>Success metrics</li>
+                            <li>Context & constraints</li>
+                            <li>Validation gates</li>
+                            <li>System dependencies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>Writing clear requirements</strong></div>
+                        <p>→ Effective prompting</p>
+                    </div>
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>Breaking down problems</strong></div>
+                        <p>→ Task decomposition</p>
+                    </div>
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>Defining acceptance criteria</strong></div>
+                        <p>→ Validation loops</p>
+                    </div>
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>Managing stakeholders</strong></div>
+                        <p>→ Orchestrating AI agents</p>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    💡 <strong>"AI agents are brilliant developers who know nothing about your project"</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: My Learning Curve - The Paradox -->
+        <div class="slide" id="slide5">
+            <div class="content-area">
+                <h2>The Paradox: To Leverage AI, I Had to Become MORE Technical</h2>
+                
+                <div class="insight-box">
+                    <h3>🤔 The Reality Check</h3>
+                    <p>Even though AI writes the code, someone still needs to:</p>
+                </div>
+
+                <div class="two-column" style="gap: 2rem; margin: 2rem 0;">
+                    <div class="learning-card">
+                        <h3>🧠 Architecture & Design</h3>
+                        <ul style="text-align: center;">
+                            <li>System design decisions</li>
+                            <li>Technology choices</li>
+                            <li>Performance considerations</li>
+                            <li>Security patterns</li>
+                        </ul>
+                    </div>
+                    <div class="learning-card">
+                        <h3>🎯 Quality & Direction</h3>
+                        <ul style="text-align: center;">
+                            <li>Spot bad patterns instantly</li>
+                            <li>Guide AI away from pitfalls</li>
+                            <li>Validate AI output</li>
+                            <li>Understand constraints</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="quote" style="margin-top: 2rem;">
+                    <p><strong>Key Learning:</strong> I had to understand concepts, not syntax. 
+                    Architecture, design patterns, data structures - the fundamentals that let me direct AI effectively.</p>
+                </div>
+
+                <div class="reflection-prompt">
+                    <h3>💭 Consider This</h3>
+                    <p>What technical concept would help you better direct AI in your domain?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Engineers Aren't Going Anywhere -->
+        <div class="slide" id="slide6">
+            <div class="content-area">
+                <h2>The New Engineering Stack</h2>
+                
+                <div class="pyramid">
+                    <div class="pyramid-level">
+                        <strong>Strategic Layer</strong><br>
+                        System design, architecture<br>
+                        <em>(Human-orchestrated)</em>
+                    </div>
+                    <div class="pyramid-level">
+                        <strong>Context Layer</strong><br>
+                        Requirements, constraints<br>
+                        <em>(Human-guided)</em>
+                    </div>
+                    <div class="pyramid-level">
+                        <strong>Execution Layer</strong><br>
+                        Implementation details<br>
+                        <em>(AI shines)</em>
+                    </div>
+                    <div class="pyramid-level">
+                        <strong>Validation Layer</strong><br>
+                        Works and scales<br>
+                        <em>(Human-AI collaboration)</em>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    🚀 <strong>"Engineers moving UP the stack, not OUT of it"</strong>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="color: var(--success-green); font-size: 1.2rem; font-weight: 600;">
+                        Higher leverage, more impact, better outcomes
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: The Context Triangle -->
+        <div class="slide" id="slide7">
+            <div class="content-area">
+                <h2>Context Engineering > Prompt Engineering</h2>
+                
+                <div class="context-triangle">
+                    <svg class="triangle-svg" viewBox="0 0 240 200">
+                        <polygon points="120,30 30,170 210,170" 
+                                 fill="none" 
+                                 stroke="var(--primary-blue)" 
+                                 stroke-width="3"/>
+                        <text x="120" y="25" text-anchor="middle" fill="var(--primary-blue)" font-weight="600" font-size="14">Context</text>
+                        <text x="50" y="190" text-anchor="middle" fill="var(--energetic-orange)" font-weight="600" font-size="14">Model</text>
+                        <text x="190" y="190" text-anchor="middle" fill="var(--success-green)" font-weight="600" font-size="14">Prompt</text>
+                        <circle cx="120" cy="110" r="5" fill="var(--dark-gray)"/>
+                    </svg>
+                </div>
+
+                <div class="demo-space">
+                    <div style="text-align: center;">
+                        <h3>LIVE DEMO SPACE</h3>
+                        <p><strong>Example Task:</strong> "Create a Python script that reads a CSV file and calculates average sales by month"</p>
+                        <div style="margin: 1rem 0;">
+                            <div style="display: inline-block; margin: 0 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">BEFORE</div>
+                            <span>→</span>
+                            <div style="display: inline-block; margin: 0 1rem; padding: 0.5rem; background: rgba(16, 185, 129, 0.3); border-radius: 5px;">AFTER</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>✍️ Quick Exercise</h3>
+                    <p>Write down a task and identify 3 pieces of needed context</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: From Prompting to Context Engineering -->
+        <div class="slide" id="slide8">
+            <div class="content-area">
+                <h2>Context Engineering: Creating AI Success Environments</h2>
+                
+                <div style="background: var(--white); padding: 2rem; border-radius: var(--border-radius); box-shadow: var(--shadow); margin: 2rem 0;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 2rem;">
+                        <div style="text-align: center;">
+                            <div style="background: var(--light-blue); padding: 1rem; border-radius: var(--border-radius);">
+                                <strong>Basic Prompting</strong><br>
+                                Clever wording
+                            </div>
+                        </div>
+                        <div style="font-size: 2rem; color: var(--energetic-orange);">→</div>
+                        <div style="text-align: center;">
+                            <div style="background: var(--success-green); color: var(--white); padding: 1rem; border-radius: var(--border-radius);">
+                                <strong>Context Engineering</strong><br>
+                                Success environments
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    💡 <strong>"Prompting is about clever wording ≈ Cooking is about stirring"</strong>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>🎯 Goal Definition</h3>
+                        <p>Clear, measurable outcomes</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔍 Context Gathering</h3>
+                        <p>Relevant information assembly</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>⚡ Environment Setup</h3>
+                        <p>Tools, constraints, guidelines</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>✅ Validation Gates</h3>
+                        <p>Quality checkpoints throughout</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: The PRP Framework -->
+        <div class="slide" id="slide9">
+            <div class="content-area">
+                <h2>Product Requirements Prompt: PRD for AI</h2>
+                
+                <div style="background: var(--white); padding: 2rem; border-radius: var(--border-radius); box-shadow: var(--shadow); margin: 2rem 0;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div style="text-align: center; padding: 1rem; background: var(--light-blue); border-radius: var(--border-radius);">
+                            <strong>Goal Definition</strong><br>
+                            <small>What success looks like</small>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--bright-orange); color: var(--white); border-radius: var(--border-radius);">
+                            <strong>Success Metrics</strong><br>
+                            <small>How to measure it</small>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--light-green); border-radius: var(--border-radius);">
+                            <strong>Context Gathering</strong><br>
+                            <small>All relevant info</small>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--medium-gray); color: var(--white); border-radius: var(--border-radius);">
+                            <strong>Implementation Blueprint</strong><br>
+                            <small>Step-by-step approach</small>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--primary-blue); color: var(--white); border-radius: var(--border-radius);">
+                            <strong>Validation Gates</strong><br>
+                            <small>Quality checkpoints</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>🏗️ 3-Minute Exercise: Gamma Clone Project</h3>
+                    <p><strong>Write down:</strong></p>
+                    <ul style="text-align: left; max-width: 600px; margin: 1rem auto;">
+                        <li>Problem statement (what you're building)</li>
+                        <li>3 pieces of context needed</li>
+                        <li>1 validation method</li>
+                    </ul>
+                    <div class="timer" onclick="startTimer(this, 180)">⏱ Start 3-minute timer</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Context Management Assessment -->
+        <div class="slide" id="slide10">
+            <div class="content-area">
+                <h2>Where Are You Now? Interactive Assessment</h2>
+                
+                <div class="pyramid">
+                    <div class="pyramid-level">
+                        <strong>Organization Level</strong><br>
+                        Context flows across teams & projects
+                    </div>
+                    <div class="pyramid-level">
+                        <strong>Team Level</strong><br>
+                        Shared context, standards, practices
+                    </div>
+                    <div class="pyramid-level">
+                        <strong>Individual Level</strong><br>
+                        Personal context management skills
+                    </div>
+                </div>
+
+                <div class="interactive-prompt">
+                    <h3>🖐️ Interactive Rating Exercise</h3>
+                    <div style="margin: 1rem 0;">
+                        <p><strong>Hold up fingers (1-10) for individual context management</strong></p>
+                        <p style="margin: 1rem 0;"><strong>Now for team context sharing</strong></p>
+                        <p style="color: var(--energetic-orange); font-weight: 600;"><strong>See the gap? That's our opportunity!</strong></p>
+                    </div>
+                </div>
+
+                <div style="background: var(--light-green); padding: 2rem; border-radius: var(--border-radius); margin: 2rem 0;">
+                    <h3>Assessment Results Visualization</h3>
+                    <div style="display: flex; justify-content: space-around; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: var(--success-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 600; margin: 0 auto;">7.2</div>
+                            <p><small>Individual Avg</small></p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: var(--energetic-orange); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 600; margin: 0 auto;">4.1</div>
+                            <p><small>Team Avg</small></p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 60px; height: 60px; background: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: 600; margin: 0 auto;">3.2</div>
+                            <p><small>Gap Size</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Why Claude Code? -->
+        <div class="slide" id="slide11">
+            <div class="content-area">
+                <h2>Claude Code: The Future of AI Development</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>Terminal-based</strong></div>
+                        <p>Closer to real development workflows</p>
+                    </div>
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>Autonomous execution</strong></div>
+                        <p>True agentic behavior - it acts, not just suggests</p>
+                    </div>
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>MCP integration</strong></div>
+                        <p>Extensible and powerful tool ecosystem</p>
+                    </div>
+                    <div class="feature-card">
+                        <div><span class="checkmark">✅</span><strong>Self-spawning agents</strong></div>
+                        <p>Meta-programming capabilities</p>
+                    </div>
+                </div>
+
+                <div class="demo-space">
+                    <div style="text-align: center;">
+                        <h3>LIVE DEMO PREPARATION</h3>
+                        <p>Setting up Claude Code demonstration...</p>
+                        <div style="margin: 1rem 0; font-family: monospace;">
+                            <div>$ claude-code --version</div>
+                            <div>$ claude-code chat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <div style="background: var(--energetic-orange); color: var(--white); padding: 1rem; border-radius: var(--border-radius); display: inline-block;">
+                        <strong>Ready for hands-on experience?</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Claude Code Best Practices -->
+        <div class="slide" id="slide12">
+            <div class="content-area">
+                <h2>Best Practices from the Trenches</h2>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card left">
+                        <h3>✅ DO</h3>
+                        <ul style="text-align: left;">
+                            <li><strong>Start in chat mode:</strong> "How should I build this?"</li>
+                            <li><strong>Use validation gates:</strong> Let it test and fix</li>
+                            <li><strong>Reference docs:</strong> /ai-docs folder</li>
+                            <li><strong>Small iterations:</strong> Features, not entire apps</li>
+                            <li><strong>Modern tools:</strong> UV for Python, not pip</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="comparison-card right">
+                        <h3>❌ DON'T</h3>
+                        <ul style="text-align: left;">
+                            <li><strong>Skip planning phase:</strong> Jump straight to code</li>
+                            <li><strong>Manual reviews:</strong> During AI generation</li>
+                            <li><strong>Legacy approaches:</strong> Old patterns/tools</li>
+                            <li><strong>Big bang builds:</strong> Entire applications</li>
+                            <li><strong>Ignore feedback loops:</strong> Test late or never</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="demo-space">
+                    <div style="text-align: center;">
+                        <h3>LIVE CLAUDE CODE SESSION</h3>
+                        <p>Watch the magic happen...</p>
+                        <div style="margin: 1rem 0; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+                            <div>Human: How should I build a simple todo app?</div>
+                            <div style="color: var(--success-green);">Claude: Let me break this down...</div>
+                            <div style="color: var(--light-blue);">• Planning phase</div>
+                            <div style="color: var(--light-blue);">• Tool selection</div>
+                            <div style="color: var(--light-blue);">• Implementation strategy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: The Self-Validation Loop -->
+        <div class="slide" id="slide13">
+            <div class="content-area">
+                <h2>QA Background → Validation Gates</h2>
+                
+                <div class="validation-loop">
+                    <div class="loop-item">Write</div>
+                    <div class="loop-item">Test</div>
+                    <div class="loop-item">Fail</div>
+                    <div class="loop-item">Fix</div>
+                    <div class="loop-item">Test</div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>🔍 Linters</h3>
+                        <p><strong>Ruff for Python</strong><br>Code quality and style</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🧪 Unit Tests</h3>
+                        <p><strong>Pytest</strong><br>Function-level validation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔗 Integration Tests</h3>
+                        <p><strong>API & Database</strong><br>System-level validation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎭 UI Tests</h3>
+                        <p><strong>Playwright MCP</strong><br>End-to-end validation</p>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    💡 <strong>"Don't review during generation - set up gates"</strong>
+                </div>
+
+                <div style="background: var(--light-green); padding: 1.5rem; border-radius: var(--border-radius); margin: 2rem 0;">
+                    <p style="text-align: center; font-weight: 600;">
+                        QA mindset + AI execution = Reliable software at AI speed
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: The New Success Equation & ROI Calculator -->
+        <div class="slide" id="slide14">
+            <div class="content-area">
+                <h2>Compute Advantage: Let's Do Real Math</h2>
+                
+                <div style="background: var(--white); padding: 2rem; border-radius: var(--border-radius); box-shadow: var(--shadow); margin: 2rem 0; font-size: 1.5rem; text-align: center;">
+                    <strong>Value = (Compute Power × Autonomy) / (Time + Effort + Cost)</strong>
+                </div>
+
+                <div class="calculator">
+                    <h3>💰 ROI Calculator</h3>
+                    <div style="margin: 1rem 0;">
+                        <label>Your hourly rate ($):</label>
+                        <input type="number" id="hourlyRate" placeholder="100" oninput="calculateROI()">
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <label>Hours on repetitive coding last week:</label>
+                        <input type="number" id="repetitiveHours" placeholder="10" oninput="calculateROI()">
+                    </div>
+                    <div style="margin: 1rem 0;">
+                        <label>AI compute cost to save 5 hours ($):</label>
+                        <input type="number" id="computeCost" placeholder="20" oninput="calculateROI()">
+                    </div>
+                    <div class="calculator-result" id="roiResult" style="display: none;">
+                        ROI: <span id="roiValue">0</span>% 
+                        | Weekly savings: $<span id="weeklySavings">0</span>
+                    </div>
+                </div>
+
+                <div class="interactive-prompt">
+                    <h3>🤯 Aha Moment Check</h3>
+                    <p><strong>Who just had an 'aha' moment about the math?</strong></p>
+                    <p style="color: var(--success-green);">Raise those hands high!</p>
+                </div>
+
+                <div class="quote">
+                    💸 <strong>Personal confession:</strong> $500-1000/month spend with clear ROI examples
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Your Gamma Clone Project - Action Time -->
+        <div class="slide" id="slide15">
+            <div class="content-area">
+                <h2>Let's Apply Everything: Group Planning</h2>
+                
+                <div style="background: var(--white); padding: 2rem; border-radius: var(--border-radius); box-shadow: var(--shadow); margin: 2rem 0;">
+                    <h3>📋 Gamma Clone Project Structure</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="padding: 1rem; background: var(--light-blue); border-radius: var(--border-radius);">
+                            <strong>Frontend</strong><br>
+                            React/Vue component
+                        </div>
+                        <div style="padding: 1rem; background: var(--bright-orange); color: var(--white); border-radius: var(--border-radius);">
+                            <strong>Backend</strong><br>
+                            API endpoints
+                        </div>
+                        <div style="padding: 1rem; background: var(--light-green); border-radius: var(--border-radius);">
+                            <strong>Database</strong><br>
+                            Data model
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h3>👥 Group Exercise - 10 Minutes</h3>
+                    <div style="text-align: left; max-width: 600px; margin: 1rem auto;">
+                        <p><strong>Break into groups of 3:</strong></p>
+                        <ul>
+                            <li>Define your core feature (2 min)</li>
+                            <li>List 5 context pieces needed (3 min)</li>
+                            <li>Choose validation strategy (2 min)</li>
+                            <li>Prepare 60-second presentation (3 min)</li>
+                        </ul>
+                    </div>
+                    <div class="timer" onclick="startTimer(this, 600)">⏱ Start 10-minute timer</div>
+                </div>
+
+                <div style="background: var(--energetic-orange); color: var(--white); padding: 1.5rem; border-radius: var(--border-radius); margin: 2rem 0;">
+                    <h3>🎯 60-Second Presentations</h3>
+                    <p>Each group shares: Feature + Context + Validation</p>
+                </div>
+
+                <div class="interactive-prompt">
+                    <h3>⚡ Final Energy Check</h3>
+                    <div class="poll-options">
+                        <div class="poll-option" onclick="selectPoll(this)">👍 Energized</div>
+                        <div class="poll-option" onclick="selectPoll(this)">👌 Ready to code</div>
+                        <div class="poll-option" onclick="selectPoll(this)">👎 Need coffee</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <div style="background: linear-gradient(135deg, var(--primary-blue), var(--success-green)); color: var(--white); padding: 2rem; border-radius: var(--border-radius); font-size: 1.2rem;">
+                        <strong>🚀 Ready to build the future with AI?</strong><br>
+                        <span style="font-size: 1rem; opacity: 0.9;">Thank you for this amazing energy!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-btn" id="prevBtn" onclick="previousSlide()">‹</button>
+            <button class="nav-btn" id="nextBtn" onclick="nextSlide()">›</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 15;
+        let timers = new Map();
+
+        // Initialize presentation
+        function init() {
+            updateSlideCounter();
+            updateProgressBar();
+            updateNavigationButtons();
+        }
+
+        // Navigation functions
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                document.getElementById(`slide${currentSlide}`).classList.remove('active');
+                document.getElementById(`slide${currentSlide}`).classList.add('prev');
+                currentSlide++;
+                document.getElementById(`slide${currentSlide}`).classList.add('active');
+                document.getElementById(`slide${currentSlide}`).classList.remove('prev');
+                updateSlideCounter();
+                updateProgressBar();
+                updateNavigationButtons();
+                animateSlideContent();
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                document.getElementById(`slide${currentSlide}`).classList.remove('active');
+                currentSlide--;
+                document.getElementById(`slide${currentSlide}`).classList.add('active');
+                document.getElementById(`slide${currentSlide}`).classList.remove('prev');
+                updateSlideCounter();
+                updateProgressBar();
+                updateNavigationButtons();
+                animateSlideContent();
+            }
+        }
+
+        function goToSlide(slideNumber) {
+            if (slideNumber >= 1 && slideNumber <= totalSlides && slideNumber !== currentSlide) {
+                document.getElementById(`slide${currentSlide}`).classList.remove('active');
+                currentSlide = slideNumber;
+                document.getElementById(`slide${currentSlide}`).classList.add('active');
+                updateSlideCounter();
+                updateProgressBar();
+                updateNavigationButtons();
+                animateSlideContent();
+            }
+        }
+
+        // Update UI elements
+        function updateSlideCounter() {
+            document.getElementById('slideCounter').textContent = `${currentSlide} / ${totalSlides}`;
+        }
+
+        function updateProgressBar() {
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function animateSlideContent() {
+            const currentSlideElement = document.getElementById(`slide${currentSlide}`);
+            const animatedElements = currentSlideElement.querySelectorAll('.fade-in, .bounce-in');
+            
+            animatedElements.forEach((element, index) => {
+                element.style.animationDelay = `${index * 0.2}s`;
+                element.classList.remove('fade-in', 'bounce-in');
+                // Force reflow
+                element.offsetHeight;
+                element.classList.add(element.classList.contains('bounce-in') ? 'bounce-in' : 'fade-in');
+            });
+        }
+
+        // Timer functionality
+        function startTimer(button, seconds) {
+            const timerId = Math.random().toString(36).substr(2, 9);
+            button.classList.add('running');
+            button.textContent = `⏱ ${seconds}s`;
+            
+            const interval = setInterval(() => {
+                seconds--;
+                button.textContent = `⏱ ${seconds}s`;
+                
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    button.classList.remove('running');
+                    button.textContent = '🔔 Time Up!';
+                    button.style.background = 'var(--success-green)';
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        button.textContent = '⏱ Reset Timer';
+                        button.style.background = 'var(--energetic-orange)';
+                    }, 3000);
+                }
+            }, 1000);
+            
+            timers.set(timerId, interval);
+        }
+
+        // Poll functionality
+        function selectPoll(option) {
+            // Remove selection from siblings
+            const siblings = option.parentNode.querySelectorAll('.poll-option');
+            siblings.forEach(sibling => sibling.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            option.classList.add('selected');
+            
+            // Add some feedback
+            option.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                option.style.transform = '';
+            }, 200);
+        }
+
+        // ROI Calculator
+        function calculateROI() {
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            const repetitiveHours = parseFloat(document.getElementById('repetitiveHours').value) || 0;
+            const computeCost = parseFloat(document.getElementById('computeCost').value) || 0;
+            
+            if (hourlyRate > 0 && repetitiveHours > 0 && computeCost > 0) {
+                const weeklySavings = (hourlyRate * repetitiveHours) - computeCost;
+                const roi = Math.round((weeklySavings / computeCost) * 100);
+                
+                document.getElementById('roiResult').style.display = 'block';
+                document.getElementById('roiValue').textContent = roi;
+                document.getElementById('weeklySavings').textContent = weeklySavings.toFixed(0);
+            } else {
+                document.getElementById('roiResult').style.display = 'none';
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowRight':
+                case ' ':
+                    event.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    previousSlide();
+                    break;
+                case 'Home':
+                    event.preventDefault();
+                    goToSlide(1);
+                    break;
+                case 'End':
+                    event.preventDefault();
+                    goToSlide(totalSlides);
+                    break;
+                case 'Escape':
+                    event.preventDefault();
+                    // Toggle fullscreen or other escape functionality
+                    break;
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide(); // Swipe left = next slide
+                } else {
+                    previousSlide(); // Swipe right = previous slide  
+                }
+            }
+        }
+
+        // Click navigation on slides
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('.nav-btn, .timer, .poll-option, input, button')) {
+                return; // Don't navigate if clicking interactive elements
+            }
+            
+            const rect = window.innerWidth;
+            const clickX = event.clientX;
+            
+            if (clickX > rect * 0.7) {
+                nextSlide();
+            } else if (clickX < rect * 0.3) {
+                previousSlide();
+            }
+        });
+
+        // Initialize presentation
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Add some interactive Easter eggs
+        let clickCount = 0;
+        document.addEventListener('click', function() {
+            clickCount++;
+            if (clickCount === 50) {
+                document.body.style.background = 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57)';
+                document.body.style.backgroundSize = '400% 400%';
+                document.body.style.animation = 'gradientShift 3s ease infinite';
+                
+                setTimeout(() => {
+                    document.body.style.background = 'linear-gradient(135deg, var(--light-blue) 0%, var(--white) 50%, var(--light-green) 100%)';
+                    document.body.style.animation = '';
+                }, 5000);
+            }
+        });
+
+        // Add gradient animation keyframes dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes gradientShift {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

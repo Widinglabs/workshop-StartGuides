@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Engineering Workshop - 7-Hour Intensive</title>
+    <style>
+        :root {
+            /* Professional Color Palette */
+            --primary-blue: #1a365d;
+            --secondary-blue: #2c5282;
+            --accent-blue: #3182ce;
+            --light-blue: #ebf8ff;
+            --success-green: #38a169;
+            --warning-orange: #dd6b20;
+            --danger-red: #e53e3e;
+            --neutral-gray: #4a5568;
+            --light-gray: #f7fafc;
+            --medium-gray: #edf2f7;
+            --dark-gray: #2d3748;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --white: #ffffff;
+            
+            /* Typography */
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+            
+            /* Spacing & Sizing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+            
+            /* Animation */
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: linear-gradient(135deg, var(--light-blue) 0%, var(--white) 100%);
+            color: var(--text-primary);
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            width: 90vw;
+            max-width: 1200px;
+            min-height: 85vh;
+            max-height: 95vh;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(26, 54, 93, 0.15);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            display: none;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Typography Hierarchy */
+        .slide h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .slide h2 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--secondary-blue);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+
+        .slide h3 {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--accent-blue);
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.3;
+        }
+
+        .slide p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.6;
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .sub-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            font-weight: 300;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        /* Layout Components */
+        .slide-header {
+            border-bottom: 3px solid var(--accent-blue);
+            padding-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            align-items: start;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        /* Lists and Content */
+        .slide ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .slide li {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-sm);
+            padding-left: var(--spacing-lg);
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .slide li::before {
+            content: "▶";
+            color: var(--accent-blue);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .highlight-box {
+            background: var(--light-blue);
+            border: 2px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+        }
+
+        .success-box {
+            background: rgba(56, 161, 105, 0.1);
+            border: 2px solid var(--success-green);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+        }
+
+        .warning-box {
+            background: rgba(221, 107, 32, 0.1);
+            border: 2px solid var(--warning-orange);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+        }
+
+        .danger-box {
+            background: rgba(229, 62, 62, 0.1);
+            border: 2px solid var(--danger-red);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            margin: var(--spacing-md) 0;
+        }
+
+        /* Timeline Component */
+        .timeline {
+            position: relative;
+            padding: var(--spacing-lg) 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-blue);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--spacing-lg);
+            padding-left: var(--spacing-2xl);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 22px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 2px var(--accent-blue);
+        }
+
+        .timeline-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .timeline-content {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Comparison Layout */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .comparison-item {
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            border: 2px solid transparent;
+            transition: var(--transition-medium);
+        }
+
+        .comparison-item.positive {
+            border-color: var(--success-green);
+            background: rgba(56, 161, 105, 0.05);
+        }
+
+        .comparison-item.negative {
+            border-color: var(--danger-red);
+            background: rgba(229, 62, 62, 0.05);
+        }
+
+        .comparison-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+
+        .comparison-item.positive .comparison-title {
+            color: var(--success-green);
+        }
+
+        .comparison-item.negative .comparison-title {
+            color: var(--danger-red);
+        }
+
+        /* Framework Diagrams */
+        .triangle-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: var(--spacing-xl) 0;
+            position: relative;
+            height: 300px;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 250px solid var(--light-blue);
+            position: relative;
+            border-radius: 8px;
+        }
+
+        .triangle-label {
+            position: absolute;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            background: var(--white);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .triangle-label.top {
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .triangle-label.left {
+            bottom: -20px;
+            left: -80px;
+        }
+
+        .triangle-label.right {
+            bottom: -20px;
+            right: -80px;
+        }
+
+        /* Process Steps */
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: var(--spacing-xl) 0;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-blue);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0 auto var(--spacing-sm);
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .step-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Equation Display */
+        .equation {
+            background: var(--dark-gray);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 1.8rem;
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            text-align: center;
+            margin: var(--spacing-xl) 0;
+            letter-spacing: 0.05em;
+        }
+
+        /* Cards and Grids */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+        }
+
+        .card {
+            background: var(--white);
+            border: 2px solid var(--medium-gray);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            transition: var(--transition-medium);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 8px 24px rgba(49, 130, 206, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .card-content {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--spacing-sm);
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: var(--transition-fast);
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: var(--accent-blue);
+            transition: width var(--transition-medium);
+            z-index: 1000;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(26, 54, 93, 0.9);
+            color: var(--white);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 1000;
+        }
+
+        /* Speaker Notes */
+        .speaker-notes {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 54, 93, 0.95);
+            color: var(--white);
+            padding: var(--spacing-md);
+            transform: translateY(100%);
+            transition: transform var(--transition-medium);
+            z-index: 1000;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+
+        .speaker-notes.visible {
+            transform: translateY(0);
+        }
+
+        .speaker-notes h4 {
+            color: var(--white);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.1rem;
+        }
+
+        .speaker-notes p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* Special Slide Styles */
+        .title-slide {
+            text-align: center;
+            justify-content: center;
+        }
+
+        .title-slide h1 {
+            font-size: 4.5rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .presenter-info {
+            margin-top: var(--spacing-2xl);
+            padding-top: var(--spacing-lg);
+            border-top: 2px solid var(--medium-gray);
+        }
+
+        .presenter-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .presenter-title {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .slide h1 { font-size: 2.8rem; }
+            .slide h2 { font-size: 2rem; }
+            .slide h3 { font-size: 1.5rem; }
+            .slide p, .slide li { font-size: 1.1rem; }
+            
+            .two-column, .comparison {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+            
+            .process-steps {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+            
+            .step:not(:last-child)::after {
+                content: "↓";
+                position: static;
+                transform: none;
+                margin: var(--spacing-sm) 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                width: 98vw;
+                min-height: 90vh;
+                max-height: 95vh;
+                padding: var(--spacing-md);
+            }
+            
+            .slide h1 { font-size: 2.2rem; }
+            .slide h2 { font-size: 1.8rem; }
+            .slide h3 { font-size: 1.4rem; }
+            .slide p { font-size: 1rem; }
+            .slide li { font-size: 0.95rem; }
+            .title-slide h1 { font-size: 2.5rem; }
+            .equation { font-size: 1.1rem; }
+            
+            .nav-controls {
+                bottom: 20px;
+            }
+            
+            .slide-counter {
+                top: 20px;
+                right: 20px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .slide {
+                display: block !important;
+                page-break-after: always;
+                width: 100%;
+                height: auto;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 20px;
+            }
+            
+            .nav-controls,
+            .progress-bar,
+            .slide-counter,
+            .speaker-notes {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar" id="progressBar"></div>
+        
+        <!-- Slide Counter -->
+        <div class="slide-counter" id="slideCounter">1 / 24</div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide" data-slide="1">
+            <div class="slide-content">
+                <h1>Agentic Engineering Workshop</h1>
+                <div class="subtitle">Building Production-Ready AI Systems</div>
+                <div class="sub-subtitle">7-Hour Intensive Workshop</div>
+                
+                <div class="presenter-info">
+                    <div class="presenter-name">Rasmus Widing</div>
+                    <div class="presenter-title">Founder - WidingLabs</div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Welcome everyone to this intensive 7-hour workshop on Agentic Engineering. This isn't just about using AI tools - it's about fundamentally changing how we approach software engineering.</p>
+                <p>Introduce yourself: Rasmus Widing, creator of PRP methodology, 15+ products delivered, unicorn experience.</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Daily Schedule -->
+        <div class="slide" data-slide="2">
+            <div class="slide-header">
+                <h1>Workshop Overview - 7 Hours</h1>
+            </div>
+            <div class="slide-content">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-title">Part 1: Foundation (Hours 1-2)</div>
+                        <div class="timeline-content">Agentic engineering fundamentals, Context engineering using PRP</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">Part 2: Practice (Hours 3-4)</div>
+                        <div class="timeline-content">Building Gamma clone POC, Rapid prototyping techniques</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">Part 3: Production (Hours 5-6)</div>
+                        <div class="timeline-content">Team collaboration, Testing and validation strategies</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">Part 4: Advanced (Hour 7)</div>
+                        <div class="timeline-content">CI/CD pipelines, Hooks, Sub agents, Advanced patterns</div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p><strong>Breaks included:</strong> 10-minute breaks every 90 minutes, 30-minute lunch break</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>We'll progress from theory to practice to production-ready systems. Each part builds on the previous.</p>
+                <p>Emphasize that this is hands-on - we'll be building real systems together.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Interactive Introduction -->
+        <div class="slide" data-slide="3">
+            <div class="slide-header">
+                <h1>Quick Team Introductions</h1>
+            </div>
+            <div class="slide-content">
+                <div class="highlight-box">
+                    <h2>30-second intros - Share:</h2>
+                    <ul>
+                        <li>Your name and role</li>
+                        <li>Your current favorite AI tool</li>
+                        <li>One challenge you face with AI coding</li>
+                    </ul>
+                </div>
+                <div class="success-box">
+                    <p><strong>Goal:</strong> Let's identify common patterns we'll address today...</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Listen for patterns in their challenges - this will help tailor examples throughout the day.</p>
+                <p>Common issues: context management, tool switching, inconsistent results, team collaboration.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: About Your Instructor -->
+        <div class="slide" data-slide="4">
+            <div class="slide-header">
+                <h1>Rasmus Widing - Why I'm Qualified to Teach This</h1>
+            </div>
+            <div class="slide-content">
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-title">🚀 Original Framework Creator</div>
+                        <div class="card-content">Product Requirements Prompt (PRP) methodology</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🧠 Context Engineering Pioneer</div>
+                        <div class="card-content">"10x better than prompt engineering"</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">📦 15+ Products Delivered</div>
+                        <div class="card-content">Across fintech, mobility, government</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">💼 Unicorn Experience</div>
+                        <div class="card-content">Bolt, Pipedrive, Monese</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🎯 All-In Commitment</div>
+                        <div class="card-content">Left head of product role to focus on agentic engineering</div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p><strong>Journey:</strong> Sweden → Estonia → Global</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Share the story of leaving a comfortable head of product role to go all-in on agentic engineering.</p>
+                <p>Emphasize real-world experience, not just theoretical knowledge.</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Evolution of Coding with AI -->
+        <div class="slide" data-slide="5">
+            <div class="slide-header">
+                <h1>Where We Came From: The Rapid Evolution</h1>
+            </div>
+            <div class="slide-content">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-title">Late 2022: ChatGPT Era</div>
+                        <div class="timeline-content">Copy-paste coding, manual prompting</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">2023: GitHub Copilot</div>
+                        <div class="timeline-content">Selection prompts, autocomplete assistance</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">2024: Multi-file Editing</div>
+                        <div class="timeline-content">Aider, Cline - cross-file understanding</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">2025: Fully Agentic Systems</div>
+                        <div class="timeline-content">Claude Code, Devin, Cursor - autonomous development</div>
+                    </div>
+                </div>
+                <div class="danger-box">
+                    <p><strong>Key Insight:</strong> We will never return to manual coding</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Emphasize the acceleration - 2.5 years from ChatGPT to fully autonomous coding agents.</p>
+                <p>This isn't a trend, it's an irreversible shift in how software gets built.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Current Landscape - Tools 2025 -->
+        <div class="slide" data-slide="6">
+            <div class="slide-header">
+                <h1>The Agentic Landscape Today</h1>
+            </div>
+            <div class="slide-content">
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-title">Claude Code</div>
+                        <div class="card-content">Full agentic coding, limitless extensibility via MCP</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Cursor</div>
+                        <div class="card-content">Agent mode with deep codebase understanding</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Devin</div>
+                        <div class="card-content">Autonomous coding agent, full environment integration</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Custom Agents</div>
+                        <div class="card-content">Domain-specialized solutions for specific use cases</div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p><strong>Note:</strong> Reference to detailed Excalidraw comparison available in workshop materials</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Each tool has strengths. The key is understanding when to use which tool for maximum leverage.</p>
+                <p>Show the Excalidraw comparison if available, or reference it for deeper dive later.</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: The Great Divide -->
+        <div class="slide" data-slide="7">
+            <div class="slide-header">
+                <h1>Traditional vs AI-Enabled Engineers</h1>
+            </div>
+            <div class="slide-content">
+                <div class="comparison">
+                    <div class="comparison-item negative">
+                        <div class="comparison-title">Traditional Engineers</div>
+                        <ul>
+                            <li>Manual coding, line by line</li>
+                            <li>Incremental improvements</li>
+                            <li>Limited by typing speed</li>
+                            <li>Single-threaded development</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item positive">
+                        <div class="comparison-title">AI-Enabled Engineers</div>
+                        <ul>
+                            <li>Orders of magnitude more value creation</li>
+                            <li>Parallel development streams</li>
+                            <li>Focus on architecture and strategy</li>
+                            <li>Exponential productivity gains</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <h3>Interactive Poll</h3>
+                    <p><strong>Show of hands:</strong> Traditional vs Already using AI daily?</p>
+                </div>
+                <div class="success-box">
+                    <p><strong>Key Insight:</strong> This isn't 10% faster - it's orders of magnitude difference</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Take the poll to understand the room. Adjust examples based on their current AI adoption level.</p>
+                <p>Emphasize this isn't incremental improvement - it's a fundamental shift in capability.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: The Fundamental Shift -->
+        <div class="slide" data-slide="8">
+            <div class="slide-header">
+                <h1>This Isn't Just About Better Tools</h1>
+            </div>
+            <div class="slide-content">
+                <div class="highlight-box" style="text-align: center; padding: var(--spacing-2xl);">
+                    <h2 style="font-size: 3rem; margin-bottom: var(--spacing-lg);">It's a fundamental shift in what it means to be an engineer</h2>
+                </div>
+                <div class="two-column">
+                    <div>
+                        <h3>From Code Writer</h3>
+                        <ul>
+                            <li>Manual implementation</li>
+                            <li>Syntax focused</li>
+                            <li>Individual contributor</li>
+                            <li>Linear problem solving</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>To Agent Orchestrator</h3>
+                        <ul>
+                            <li>System architecture</li>
+                            <li>Context focused</li>
+                            <li>Force multiplier</li>
+                            <li>Parallel orchestration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>This is the core transformation - from writing code to orchestrating AI agents to write code.</p>
+                <p>The skills that matter now: context engineering, system thinking, agent orchestration.</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Context is Everything -->
+        <div class="slide" data-slide="9">
+            <div class="slide-header">
+                <h1>The Fundamental Truth</h1>
+            </div>
+            <div class="slide-content">
+                <div class="highlight-box" style="text-align: center; padding: var(--spacing-2xl);">
+                    <h2 style="font-size: 4rem; color: var(--primary-blue);">Context is Everything</h2>
+                </div>
+                <div class="three-column">
+                    <div class="success-box">
+                        <h3>The Model</h3>
+                        <p>Your choice of AI model is everything</p>
+                    </div>
+                    <div class="success-box">
+                        <h3>The Context</h3>
+                        <p>The information you provide is everything</p>
+                    </div>
+                    <div class="success-box">
+                        <h3>The Prompt</h3>
+                        <p>How you structure requests is everything</p>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <p><strong>Critical Understanding:</strong> This isn't three separate things - it's one integrated system</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Most people think of these as separate concerns. They're not - they're one system that must work together.</p>
+                <p>This is why random prompting with cheap models fails, while systematic context engineering succeeds.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Two Approaches -->
+        <div class="slide" data-slide="10">
+            <div class="slide-header">
+                <h1>What Most Engineers Do vs What Successful Engineers Do</h1>
+            </div>
+            <div class="slide-content">
+                <div class="comparison">
+                    <div class="comparison-item negative">
+                        <div class="comparison-title">Most Engineers</div>
+                        <ul>
+                            <li>Quick prompts without context</li>
+                            <li>Use cheapest models available</li>
+                            <li>Expect AI to "figure it out"</li>
+                            <li>Get frustrated with inconsistent results</li>
+                            <li>Blame the AI when it fails</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item positive">
+                        <div class="comparison-title">Successful Engineers</div>
+                        <ul>
+                            <li>Carefully curated context</li>
+                            <li>Use best models for the task</li>
+                            <li>Structured, systematic prompts</li>
+                            <li>Treat AI as genius on first day</li>
+                            <li>Invest in context infrastructure</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p><strong>Mindset Shift:</strong> From "AI should understand me" to "I should provide everything AI needs to succeed"</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>This is the core behavioral difference. Successful engineers take responsibility for providing good context.</p>
+                <p>The "genius on first day" analogy is key - you'd give a new genius developer all the context they need.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: The Context Triangle -->
+        <div class="slide" data-slide="11">
+            <div class="slide-header">
+                <h1>The Context Triangle Framework</h1>
+            </div>
+            <div class="slide-content">
+                <div class="triangle-diagram">
+                    <div class="triangle">
+                        <div class="triangle-label top">Context</div>
+                        <div class="triangle-label left">Model</div>
+                        <div class="triangle-label right">Prompt</div>
+                    </div>
+                </div>
+                <div class="three-column">
+                    <div>
+                        <h3>Context</h3>
+                        <p>What information does the AI need to know?</p>
+                    </div>
+                    <div>
+                        <h3>Model</h3>
+                        <p>Which AI model best handles this specific task?</p>
+                    </div>
+                    <div>
+                        <h3>Prompt</h3>
+                        <p>How do you structure the request for clarity?</p>
+                    </div>
+                </div>
+                <div class="danger-box">
+                    <p><strong>Warning:</strong> Get any one wrong = mediocre results. Get all three right = magic</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>This triangle represents the three pillars of successful agentic engineering.</p>
+                <p>Most failures come from optimizing one pillar while ignoring the others.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Context Management Levels -->
+        <div class="slide" data-slide="12">
+            <div class="slide-header">
+                <h1>Individual vs Team Context Management</h1>
+            </div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3>Individual Level</h3>
+                        <ul>
+                            <li>Personal CLAUDE.md files</li>
+                            <li>Custom prompt templates</li>
+                            <li>Individual MCP servers</li>
+                            <li>Personal file organization</li>
+                            <li>Local context patterns</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Team Level</h3>
+                        <ul>
+                            <li>Shared CLAUDE.md in version control</li>
+                            <li>Standardized patterns and practices</li>
+                            <li>Common MCP configurations</li>
+                            <li>Structured handoff processes</li>
+                            <li>Team context inheritance</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <p><strong>Failure Point:</strong> Most teams fail at team-level context management. They optimize individual workflows but break down at collaboration.</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Individual context management is table stakes. Team context management is where competitive advantage lies.</p>
+                <p>We'll cover both individual and team patterns in the hands-on portions.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Context Engineering Process -->
+        <div class="slide" data-slide="13">
+            <div class="slide-header">
+                <h1>The 5-Step Context Engineering Process</h1>
+            </div>
+            <div class="slide-content">
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Inventory</div>
+                        <div class="step-description">What does the AI need to know?</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Prioritize</div>
+                        <div class="step-description">What's most important for this task?</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Structure</div>
+                        <div class="step-description">How to present information clearly?</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Validate</div>
+                        <div class="step-description">How to ensure successful completion?</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Iterate</div>
+                        <div class="step-description">How to improve context over time?</div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p><strong>Decision Point:</strong> When something fails → Start over or iterate on existing context?</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>This is the systematic approach to context engineering. We'll practice this process throughout the workshop.</p>
+                <p>The iteration step is crucial - most people start over instead of improving their context systematically.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Context Success vs Failure -->
+        <div class="slide" data-slide="14">
+            <div class="slide-header">
+                <h1>Context in Action - Success vs Failure Examples</h1>
+            </div>
+            <div class="slide-content">
+                <div class="comparison">
+                    <div class="comparison-item negative">
+                        <div class="comparison-title">Vague Context → Poor Results</div>
+                        <div style="background: var(--dark-gray); color: var(--white); padding: var(--spacing-md); border-radius: 8px; font-family: var(--font-mono); font-size: 0.9rem; margin: var(--spacing-sm) 0;">
+"Make this component better"
+                        </div>
+                        <p><strong>Result:</strong> Generic suggestions, doesn't understand your specific needs or constraints</p>
+                    </div>
+                    <div class="comparison-item positive">
+                        <div class="comparison-title">Rich Context → Excellent Results</div>
+                        <div style="background: var(--dark-gray); color: var(--white); padding: var(--spacing-md); border-radius: 8px; font-family: var(--font-mono); font-size: 0.9rem; margin: var(--spacing-sm) 0;">
+"Optimize this React component for performance. 
+Current issue: re-renders on every prop change.
+Constraints: Must maintain current API.
+Tech stack: React 18, TypeScript, styled-components.
+Performance target: <100ms render time."
+                        </div>
+                        <p><strong>Result:</strong> Specific, actionable optimizations that fit your exact constraints</p>
+                    </div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Show real examples from your own work if possible. The difference in output quality is dramatic.</p>
+                <p>This is why context engineering is more important than prompt engineering.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: The Compute Advantage Equation -->
+        <div class="slide" data-slide="15">
+            <div class="slide-header">
+                <h1>The Equation That Changes Everything</h1>
+            </div>
+            <div class="slide-content">
+                <div class="equation">
+                    Compute Advantage = (Compute Scaling × Autonomy) / (Time + Effort + Monetary Cost)
+                </div>
+                <div class="highlight-box">
+                    <h3>First Time in History</h3>
+                    <p>Your individual value creation is directly proportional to the compute you can effectively harness</p>
+                </div>
+                <div class="three-column">
+                    <div>
+                        <h4>Compute Scaling</h4>
+                        <p>Better models, more context, parallel processing</p>
+                    </div>
+                    <div>
+                        <h4>Autonomy</h4>
+                        <p>Less manual intervention, more independent AI action</p>
+                    </div>
+                    <div>
+                        <h4>Total Cost</h4>
+                        <p>Time, effort, and monetary investment required</p>
+                    </div>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>This equation explains why some engineers see 10x+ productivity gains while others see none.</p>
+                <p>It's not about the tools - it's about maximizing the compute advantage equation.</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Real Example - Model Selection -->
+        <div class="slide" data-slide="16">
+            <div class="slide-header">
+                <h1>Compute Advantage Example: Model Selection</h1>
+            </div>
+            <div class="slide-content">
+                <div class="comparison">
+                    <div class="comparison-item negative">
+                        <div class="comparison-title">Basic Model ($20/month)</div>
+                        <ul>
+                            <li>8K context window</li>
+                            <li>Basic reasoning capability</li>
+                            <li>Frequent context loss</li>
+                            <li>Multiple iterations needed</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item positive">
+                        <div class="comparison-title">Premium Model ($40/month)</div>
+                        <ul>
+                            <li>200K context window</li>
+                            <li>Advanced reasoning</li>
+                            <li>Maintains full context</li>
+                            <li>Single iteration success</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="success-box">
+                    <h3>ROI Calculation</h3>
+                    <p><strong>Result:</strong> 3x better output quality for 2x cost = massive compute advantage</p>
+                    <p><strong>Time saved:</strong> 5-10 hours per week = $500-1000 value for $20 investment</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Use real numbers from your experience. Show how the math works out in practice.</p>
+                <p>Most people optimize for cost instead of value - this is backwards thinking.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Real Example - Tool & Planning Selection -->
+        <div class="slide" data-slide="17">
+            <div class="slide-header">
+                <h1>Compute Advantage Examples: Tools & Planning</h1>
+            </div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3>Tool Selection Example</h3>
+                        <div class="comparison" style="grid-template-columns: 1fr;">
+                            <div class="comparison-item negative">
+                                <div class="comparison-title">Chat AI ($10/month)</div>
+                                <p>Manual copy-paste, context switching, limited autonomy</p>
+                            </div>
+                            <div class="comparison-item positive">
+                                <div class="comparison-title">Agentic Tool ($200/month)</div>
+                                <p>Full automation, context preservation, 5-100x autonomy increase</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Planning vs Iteration</h3>
+                        <div class="comparison" style="grid-template-columns: 1fr;">
+                            <div class="comparison-item negative">
+                                <div class="comparison-title">No Planning</div>
+                                <p>6+ hours of iteration, context loss, repeated mistakes</p>
+                            </div>
+                            <div class="comparison-item positive">
+                                <div class="comparison-title">1 Hour Planning</div>
+                                <p>2 hours execution, clear context, systematic approach</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <p><strong>Time Investment Ratio:</strong> 1 hour planning saves 3-5 hours execution</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>These are real examples from workshop participants. The time savings compound quickly.</p>
+                <p>Emphasize that planning time is the highest ROI activity in agentic engineering.</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Career Implications -->
+        <div class="slide" data-slide="18">
+            <div class="slide-header">
+                <h1>Why This Matters for Your Career</h1>
+            </div>
+            <div class="slide-content">
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-title">🎯 Temporal Goldilocks Zone</div>
+                        <div class="card-content">Massive leverage available now while others struggle with basics</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🚀 Sustainable Advantage</div>
+                        <div class="card-content">Early adopters will maintain competitive edge as tools improve</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">⚠️ Future Competition</div>
+                        <div class="card-content">Late adopters will compete on commoditized, low-value tasks</div>
+                    </div>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-title">2025: Early Advantage</div>
+                        <div class="timeline-content">Massive productivity gains while others learn basics</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">2026-2027: Competitive Edge</div>
+                        <div class="timeline-content">Advanced patterns and systems separate leaders</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-title">2028+: New Normal</div>
+                        <div class="timeline-content">Agentic engineering becomes baseline expectation</div>
+                    </div>
+                </div>
+                <div class="danger-box">
+                    <p><strong>Critical Window:</strong> This leverage won't last forever - act now</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>This is about positioning for the next 5-10 years of your career.</p>
+                <p>The window for massive advantage is now - don't wait for tools to become "more mature".</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Personal Investment Strategy -->
+        <div class="slide" data-slide="19">
+            <div class="slide-header">
+                <h1>Personal Compute Investment: $500-1000/month</h1>
+            </div>
+            <div class="slide-content">
+                <div class="highlight-box">
+                    <h3>ROI Calculation</h3>
+                    <ul>
+                        <li>$20 compute investment saves 5-10 hours of manual work</li>
+                        <li>Your time worth $100/hour = $500-1000 value created</li>
+                        <li>Return on investment: 25-50x</li>
+                    </ul>
+                </div>
+                <div class="two-column">
+                    <div class="success-box">
+                        <div class="comparison-title">Investment Mindset</div>
+                        <ul>
+                            <li>Buying competitive advantage</li>
+                            <li>Compound returns on time saved</li>
+                            <li>Building systematic capabilities</li>
+                            <li>Future-proofing career</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item negative">
+                        <div class="comparison-title">Expense Mindset</div>
+                        <ul>
+                            <li>Optimizing for lowest cost</li>
+                            <li>Manual workarounds</li>
+                            <li>Competing on commoditized tasks</li>
+                            <li>Falling behind technologically</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <p><strong>Reality Check:</strong> $500-1000/month is less than most people spend on coffee and lunch</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Reframe this as investment, not expense. The ROI is measurable and immediate.</p>
+                <p>Compare to other professional investments: conferences, courses, certifications.</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Workshop Parts Overview -->
+        <div class="slide" data-slide="20">
+            <div class="slide-header">
+                <h1>What We're Building Today</h1>
+            </div>
+            <div class="slide-content">
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Foundation</div>
+                        <div class="step-description">Context engineering fundamentals</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Practice</div>
+                        <div class="step-description">Gamma clone POC, rapid prototyping</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Production</div>
+                        <div class="step-description">Team collaboration, testing strategies</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Advanced</div>
+                        <div class="step-description">Custom MCP, multi-agent workflows</div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p><strong>Progression:</strong> Each part builds on the previous, from theory to advanced production patterns</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Emphasize the hands-on nature - we're building real systems together.</p>
+                <p>Each part is designed to reinforce the previous concepts while adding new complexity.</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Foundation & Practice (Parts 1-2) -->
+        <div class="slide" data-slide="21">
+            <div class="slide-header">
+                <h1>Parts 1-2: Foundation & Practice</h1>
+            </div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3>Foundation (Hours 1-2)</h3>
+                        <ul>
+                            <li>Context engineering fundamentals</li>
+                            <li>Setting up agentic environment</li>
+                            <li>PRP methodology deep dive</li>
+                            <li>Individual workflow optimization</li>
+                            <li>CLAUDE.md best practices</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Practice (Hours 3-4)</h3>
+                        <ul>
+                            <li>Team collaboration setup</li>
+                            <li>Gamma clone proof-of-concept</li>
+                            <li>Rapid prototyping techniques</li>
+                            <li>Iterative improvement patterns</li>
+                            <li>Real-world problem solving</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="success-box">
+                    <p><strong>Goal:</strong> By end of Part 2, you'll have a working prototype and systematic approach to agentic development</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Parts 1-2 establish the foundation. Don't rush through the concepts in Part 1 - they're critical for success.</p>
+                <p>The Gamma clone is intentionally simple but demonstrates all core principles.</p>
+            </div>
+        </div>
+
+        <!-- Slide 22: Production & Advanced (Parts 3-4) -->
+        <div class="slide" data-slide="22">
+            <div class="slide-header">
+                <h1>Parts 3-4: Production & Advanced</h1>
+            </div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3>Production (Hours 5-6)</h3>
+                        <ul>
+                            <li>Production-ready patterns</li>
+                            <li>Team collaboration workflows</li>
+                            <li>Testing and validation strategies</li>
+                            <li>CI/CD integration</li>
+                            <li>Error handling and recovery</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Advanced (Hour 7)</h3>
+                        <ul>
+                            <li>Custom MCP servers</li>
+                            <li>Multi-agent workflows</li>
+                            <li>Scaling and maintenance</li>
+                            <li>Advanced automation patterns</li>
+                            <li>Future-proofing strategies</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="warning-box">
+                    <p><strong>Reality Check:</strong> Parts 3-4 are where theory meets enterprise reality. We'll address real constraints and challenges.</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Parts 3-4 are where we address real-world concerns: security, compliance, team coordination.</p>
+                <p>The Advanced section is cutting-edge - some participants may need to implement these patterns later.</p>
+            </div>
+        </div>
+
+        <!-- Slide 23: Questions & Key Takeaways -->
+        <div class="slide" data-slide="23">
+            <div class="slide-header">
+                <h1>Before We Dive In - Questions</h1>
+            </div>
+            <div class="slide-content">
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-title">🤔 Current Frustrations</div>
+                        <div class="card-content">"What's your current biggest frustration with AI coding tools?"</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🎯 Success Definition</div>
+                        <div class="card-content">"What would success look like by end of today?"</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">🔄 Workflow Preservation</div>
+                        <div class="card-content">"What workflow patterns do you want to preserve?"</div>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <h3>Key Insight</h3>
+                    <p>We're not replacing your skills - we're amplifying them with exponential leverage</p>
+                </div>
+                <div class="success-box">
+                    <p><strong>Approach:</strong> Build on your existing strengths while adding agentic capabilities</p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Take time for real answers here. This helps you tailor the rest of the workshop to their needs.</p>
+                <p>Listen for common patterns and address them throughout the day.</p>
+            </div>
+        </div>
+
+        <!-- Slide 24: Ready to Build -->
+        <div class="slide" data-slide="24">
+            <div class="slide-header">
+                <h1>Theory Time is Over - Let's Build Something Real</h1>
+            </div>
+            <div class="slide-content">
+                <div class="highlight-box" style="text-align: center; padding: var(--spacing-2xl);">
+                    <h2 style="font-size: 2.5rem; margin-bottom: var(--spacing-lg);">We'll start with the ugliest, hackiest POC you've ever seen</h2>
+                </div>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Fast Iteration</div>
+                        <div class="step-description">Get something working quickly</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Validate Ideas</div>
+                        <div class="step-description">Test core assumptions</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Systematic Improvement</div>
+                        <div class="step-description">Apply engineering discipline</div>
+                    </div>
+                </div>
+                <div class="success-box" style="text-align: center;">
+                    <h3>Ready? Let's get our hands dirty.</h3>
+                    <p><strong>This is exactly how real agentic engineering works</strong></p>
+                </div>
+            </div>
+            <div class="speaker-notes">
+                <h4>Speaker Notes</h4>
+                <p>Set expectations: we'll build something ugly first, then make it beautiful.</p>
+                <p>This mirrors real agentic engineering: fast iteration, then systematic improvement.</p>
+                <p>Transition to hands-on Part 1 now.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next →</button>
+        <button class="nav-btn" onclick="toggleNotes()">Speaker Notes</button>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes" id="speakerNotes">
+        <h4>Speaker Notes</h4>
+        <p>Use 'S' key to toggle notes, arrow keys or space to navigate, 'Esc' to exit fullscreen.</p>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 24;
+
+        function updateSlideDisplay() {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Show current slide
+            document.querySelector(`[data-slide="${currentSlide}"]`).classList.add('active');
+            
+            // Update counter
+            document.getElementById('slideCounter').textContent = `${currentSlide} / ${totalSlides}`;
+            
+            // Update progress bar
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+            
+            // Update speaker notes
+            const activeSlide = document.querySelector(`[data-slide="${currentSlide}"]`);
+            const notes = activeSlide.querySelector('.speaker-notes');
+            const speakerNotesContainer = document.getElementById('speakerNotes');
+            
+            if (notes) {
+                speakerNotesContainer.innerHTML = notes.innerHTML;
+            } else {
+                speakerNotesContainer.innerHTML = '<h4>Speaker Notes</h4><p>No specific notes for this slide.</p>';
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlideDisplay();
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlideDisplay();
+            }
+        }
+
+        function goToSlide(slideNumber) {
+            if (slideNumber >= 1 && slideNumber <= totalSlides) {
+                currentSlide = slideNumber;
+                updateSlideDisplay();
+            }
+        }
+
+        function toggleNotes() {
+            const notes = document.getElementById('speakerNotes');
+            notes.classList.toggle('visible');
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowRight':
+                case ' ': // Spacebar
+                    event.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    previousSlide();
+                    break;
+                case 'Home':
+                    event.preventDefault();
+                    goToSlide(1);
+                    break;
+                case 'End':
+                    event.preventDefault();
+                    goToSlide(totalSlides);
+                    break;
+                case 's':
+                case 'S':
+                    event.preventDefault();
+                    toggleNotes();
+                    break;
+                case 'Escape':
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                    }
+                    break;
+                case 'f':
+                case 'F':
+                    event.preventDefault();
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    }
+                    break;
+            }
+        });
+
+        // Click navigation on slides
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('.nav-controls') || event.target.closest('.speaker-notes')) {
+                return; // Don't navigate if clicking on controls or notes
+            }
+            
+            const rect = window.innerWidth;
+            const clickX = event.clientX;
+            
+            if (clickX < rect / 2) {
+                previousSlide();
+            } else {
+                nextSlide();
+            }
+        });
+
+        // Initialize
+        updateSlideDisplay();
+
+        // Auto-save presentation state
+        window.addEventListener('beforeunload', function() {
+            localStorage.setItem('agentic-workshop-slide', currentSlide);
+        });
+
+        // Restore presentation state
+        window.addEventListener('load', function() {
+            const savedSlide = localStorage.getItem('agentic-workshop-slide');
+            if (savedSlide) {
+                goToSlide(parseInt(savedSlide));
+            }
+        });
+
+        // Print optimization
+        window.addEventListener('beforeprint', function() {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.style.display = 'block';
+                slide.style.pageBreakAfter = 'always';
+            });
+        });
+
+        window.addEventListener('afterprint', function() {
+            updateSlideDisplay();
+        });
+    </script>
+</body>
+</html>

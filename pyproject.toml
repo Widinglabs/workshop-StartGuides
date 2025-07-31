@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "workshop-startguides"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=0.60.0",
+    "python-dotenv>=1.1.1",
+]
+
+[project.scripts]
+agent = "main:main"
+
+[tool.setuptools]
+packages = ["slide_agent"]
+py-modules = ["main"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "ruff>=0.12.7",
+]
+
+[tool.ruff]
+line-length = 100
+exclude = ["build/", "docs/", ".venv/", "part1/", "part2/", "PRPs/", "agent_wiki/", "slides/"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # Pyflakes
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "I",    # isort
+]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.uv]
+package = true

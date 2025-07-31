@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Best Practices Workshop</title>
+    <style>
+        /* CSS Custom Properties for consistent theming */
+        :root {
+            --primary-blue: #1e293b;
+            --secondary-blue: #334155;
+            --accent-blue: #3b82f6;
+            --soft-gray: #f1f5f9;
+            --medium-gray: #64748b;
+            --dark-gray: #0f172a;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            
+            /* Typography scale */
+            --font-xs: 0.75rem;
+            --font-sm: 0.875rem;
+            --font-base: 1rem;
+            --font-lg: 1.125rem;
+            --font-xl: 1.25rem;
+            --font-2xl: 1.5rem;
+            --font-3xl: 1.875rem;
+            --font-4xl: 2.25rem;
+            --font-5xl: 3rem;
+            
+            /* Spacing scale */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--soft-gray) 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 90vw;
+            max-width: 1200px;
+            height: 85vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: var(--space-16) var(--space-20);
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Typography */
+        .slide h1 {
+            font-size: var(--font-5xl);
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-6);
+            line-height: 1.2;
+        }
+
+        .slide h2 {
+            font-size: var(--font-4xl);
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-8);
+            line-height: 1.3;
+        }
+
+        .slide h3 {
+            font-size: var(--font-2xl);
+            font-weight: 600;
+            color: var(--secondary-blue);
+            margin-bottom: var(--space-4);
+        }
+
+        .subtitle {
+            font-size: var(--font-xl);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-12);
+            font-weight: 400;
+        }
+
+        .slide p {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-4);
+            line-height: 1.7;
+        }
+
+        /* Code styling */
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: var(--space-6);
+            border-radius: 12px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            font-size: var(--font-base);
+            line-height: 1.5;
+            margin: var(--space-4) 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--success-green));
+        }
+
+        .inline-code {
+            background: #f1f5f9;
+            color: var(--primary-blue);
+            padding: var(--space-1) var(--space-2);
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9em;
+        }
+
+        /* Lists */
+        .slide ul {
+            list-style: none;
+            margin: var(--space-6) 0;
+        }
+
+        .slide li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: var(--space-4);
+            padding: var(--space-4);
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-blue);
+            transition: all 0.3s ease;
+        }
+
+        .slide li:hover {
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateX(4px);
+        }
+
+        .slide li .icon {
+            font-size: var(--font-xl);
+            margin-right: var(--space-3);
+            min-width: 2rem;
+        }
+
+        .slide li .content {
+            flex: 1;
+        }
+
+        .slide li .title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-1);
+        }
+
+        .slide li .description {
+            color: var(--text-secondary);
+            font-size: var(--font-base);
+        }
+
+        /* Two column layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-8);
+            height: 100%;
+            align-items: start;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Three column layout */
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--space-6);
+            margin-top: var(--space-8);
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: var(--space-6);
+            box-shadow: 
+                0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h4 {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+            font-size: var(--font-lg);
+        }
+
+        .card p {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+        }
+
+        /* Comparison styles */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        .comparison-item {
+            padding: var(--space-6);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .comparison-item.bad {
+            background: rgba(239, 68, 68, 0.05);
+            border: 2px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .comparison-item.good {
+            background: rgba(16, 185, 129, 0.05);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .comparison-item::before {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            font-size: var(--font-2xl);
+        }
+
+        .comparison-item.bad::before {
+            content: '❌';
+        }
+
+        .comparison-item.good::before {
+            content: '✅';
+        }
+
+        .comparison-label {
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+
+        .comparison-item.bad .comparison-label {
+            color: #dc2626;
+        }
+
+        .comparison-item.good .comparison-label {
+            color: var(--success-green);
+        }
+
+        /* Visual elements */
+        .workflow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: var(--space-8) 0;
+            padding: var(--space-6);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border-radius: 16px;
+            position: relative;
+        }
+
+        .workflow-step {
+            text-align: center;
+            flex: 1;
+            padding: var(--space-4);
+            position: relative;
+        }
+
+        .workflow-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: var(--font-2xl);
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .workflow-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-2);
+            font-size: var(--font-xl);
+            font-weight: bold;
+        }
+
+        .workflow-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-1);
+        }
+
+        .workflow-desc {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+        }
+
+        /* Progress and navigation */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.2);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--success-green));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: var(--space-4);
+            right: var(--space-4);
+            background: rgba(30, 41, 59, 0.9);
+            color: white;
+            padding: var(--space-2) var(--space-4);
+            border-radius: 20px;
+            font-size: var(--font-sm);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .navigation-hint {
+            position: fixed;
+            bottom: var(--space-4);
+            left: var(--space-4);
+            background: rgba(30, 41, 59, 0.9);
+            color: white;
+            padding: var(--space-2) var(--space-4);
+            border-radius: 20px;
+            font-size: var(--font-xs);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            opacity: 0.7;
+        }
+
+        /* Special slide layouts */
+        .title-slide {
+            text-align: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            color: white;
+            font-size: var(--font-5xl);
+            margin-bottom: var(--space-4);
+        }
+
+        .title-slide .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: var(--font-2xl);
+        }
+
+        .title-slide .graphic {
+            width: 200px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin: var(--space-8) auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-4xl);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Warning/callout styles */
+        .warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning-orange);
+            padding: var(--space-4);
+            border-radius: 0 8px 8px 0;
+            margin: var(--space-4) 0;
+        }
+
+        .success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-green);
+            padding: var(--space-4);
+            border-radius: 0 8px 8px 0;
+            margin: var(--space-4) 0;
+        }
+
+        .tip {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--accent-blue);
+            padding: var(--space-4);
+            border-radius: 0 8px 8px 0;
+            margin: var(--space-4) 0;
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .warning .callout-title {
+            color: #d97706;
+        }
+
+        .success .callout-title {
+            color: var(--success-green);
+        }
+
+        .tip .callout-title {
+            color: var(--accent-blue);
+        }
+
+        /* Cheat sheet styles */
+        .cheat-sheet {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-8);
+            margin-top: var(--space-6);
+        }
+
+        .cheat-section h4 {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            font-size: var(--font-xl);
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: var(--space-2);
+        }
+
+        .cheat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3);
+            background: var(--soft-gray);
+            border-radius: 6px;
+            margin-bottom: var(--space-2);
+        }
+
+        .cheat-key {
+            font-family: 'SF Mono', Monaco, monospace;
+            background: var(--primary-blue);
+            color: white;
+            padding: var(--space-1) var(--space-2);
+            border-radius: 4px;
+            font-size: var(--font-sm);
+        }
+
+        .cheat-desc {
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+        }
+
+        /* Learning path */
+        .learning-path {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+            margin-top: var(--space-8);
+        }
+
+        .path-step {
+            display: flex;
+            align-items: center;
+            padding: var(--space-4);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .path-number {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: var(--space-4);
+        }
+
+        .path-content {
+            flex: 1;
+        }
+
+        .path-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: var(--space-1);
+        }
+
+        .path-desc {
+            color: var(--text-secondary);
+            font-size: var(--font-base);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .slide {
+                width: 95vw;
+                height: 90vh;
+                padding: var(--space-8) var(--space-6);
+            }
+            
+            .slide h1 {
+                font-size: var(--font-4xl);
+            }
+            
+            .slide h2 {
+                font-size: var(--font-3xl);
+            }
+            
+            .two-column,
+            .three-column,
+            .comparison,
+            .cheat-sheet {
+                grid-template-columns: 1fr;
+            }
+            
+            .workflow-diagram {
+                flex-direction: column;
+            }
+            
+            .workflow-step:not(:last-child)::after {
+                content: '↓';
+                position: static;
+                margin: var(--space-2) 0;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .slide {
+                display: block !important;
+                page-break-after: always;
+                width: 100%;
+                height: auto;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 2rem;
+            }
+            
+            .progress-bar,
+            .slide-counter,
+            .navigation-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="graphic">💻 🤖</div>
+            <h1>Claude Code Best Practices</h1>
+            <p class="subtitle">From Beginner to Expert: Mastering Agentic Development</p>
+        </div>
+
+        <!-- Slide 2: Philosophy & Design -->
+        <div class="slide">
+            <h2>Understanding Claude Code's Philosophy</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Intentionally Unopinionated</h3>
+                    <p>Claude Code provides raw access to model capabilities without imposing rigid patterns or workflows.</p>
+                    
+                    <div class="tip">
+                        <div class="callout-title">Key Insight</div>
+                        <p>"We don't know what the right UX is yet, so we're starting simple" - Boris, Anthropic</p>
+                    </div>
+                    
+                    <h3>Low-Level by Design</h3>
+                    <p>Minimal barriers between you and Claude's intelligence, allowing you to discover optimal patterns organically.</p>
+                </div>
+                <div class="column">
+                    <div class="code-block">
+# Clean, minimalist interface
+$ claude
+> Read the authentication module
+
+# Raw access to capabilities
+> Make a plan for adding 2FA
+> Implement step by step
+> Run tests and fix issues</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Core Principles -->
+        <div class="slide">
+            <h2>5 Core Principles</h2>
+            <ul>
+                <li>
+                    <span class="icon">🧠</span>
+                    <div class="content">
+                        <div class="title">Trust the Model</div>
+                        <div class="description">Don't over-engineer. Claude can infer intent and handle complexity.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">🔓</span>
+                    <div class="content">
+                        <div class="title">Raw Access</div>
+                        <div class="description">Minimal barriers between you and Claude's capabilities.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">🔧</span>
+                    <div class="content">
+                        <div class="title">Unix Philosophy</div>
+                        <div class="description">Composable tools that do one thing well and work together.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">🛡️</span>
+                    <div class="content">
+                        <div class="title">Safety First</div>
+                        <div class="description">Conservative permissions and secure defaults protect your code.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">🎯</span>
+                    <div class="content">
+                        <div class="title">Flexibility Over Convention</div>
+                        <div class="description">Discover optimal patterns rather than imposing rigid structures.</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Slide 4: Getting Started -->
+        <div class="slide">
+            <h2>Your First Steps</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Installation</h3>
+                    <div class="code-block">npm install -g @anthropic-ai/claude-code</div>
+                    
+                    <h3>Basic Commands</h3>
+                    <div class="code-block">cd your-project
+claude
+/init</div>
+                    
+                    <div class="success">
+                        <div class="callout-title">Pro Tip</div>
+                        <p>Start with codebase Q&A to build confidence before diving into implementation tasks.</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>First Session Example</h3>
+                    <div class="code-block"># Explore your codebase
+> What does this project do?
+> How is authentication handled?
+> Show me the main API endpoints
+
+# Then start coding
+> Add input validation to the login form
+> Write tests for the new validation
+> Update documentation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: The Golden Workflow -->
+        <div class="slide">
+            <h2>The Explore → Plan → Code → Verify Pattern</h2>
+            <div class="workflow-diagram">
+                <div class="workflow-step">
+                    <div class="workflow-icon">1</div>
+                    <div class="workflow-title">EXPLORE</div>
+                    <div class="workflow-desc">"Read the authentication module"</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">2</div>
+                    <div class="workflow-title">PLAN</div>
+                    <div class="workflow-desc">"Make a plan for adding 2FA"</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">3</div>
+                    <div class="workflow-title">CODE</div>
+                    <div class="workflow-desc">"Implement step by step"</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">4</div>
+                    <div class="workflow-title">VERIFY</div>
+                    <div class="workflow-desc">"Run tests and fix issues"</div>
+                </div>
+            </div>
+            <p>This cyclical pattern ensures thorough understanding before implementation and proper validation after changes.</p>
+        </div>
+
+        <!-- Slide 6: Memory Management -->
+        <div class="slide">
+            <h2>CLAUDE.md: Your AI's Memory</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Hierarchy</h3>
+                    <ul style="list-style: disc; margin-left: 2rem;">
+                        <li><code>~/.claude/CLAUDE.md</code> - Personal (all projects)</li>
+                        <li><code>./CLAUDE.md</code> - Project root (team shared)</li>
+                        <li><code>./subdir/CLAUDE.md</code> - Directory-specific</li>
+                    </ul>
+                    
+                    <div class="tip">
+                        <div class="callout-title">Auto-Loading</div>
+                        <p>These files become part of Claude's context automatically - no need to reference them manually.</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Example CLAUDE.md</h3>
+                    <div class="code-block"># Project: E-commerce API
+
+## Architecture
+- FastAPI backend
+- PostgreSQL database
+- Redis for caching
+- JWT authentication
+
+## Key Patterns
+- Use Pydantic models for validation
+- Repository pattern for data access
+- Factory pattern for service creation
+
+## Testing
+- pytest for unit tests
+- TestClient for API testing
+- Use fixtures for database setup</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: The Power of Specificity -->
+        <div class="slide">
+            <h2>Be Specific = Better Results</h2>
+            <div class="comparison">
+                <div class="comparison-item bad">
+                    <div class="comparison-label">Poor Request</div>
+                    <p>"Add error handling"</p>
+                </div>
+                <div class="comparison-item good">
+                    <div class="comparison-label">Specific Request</div>
+                    <p>"Add error handling for user registration endpoint that catches duplicate email errors and returns user-friendly message with 409 status"</p>
+                </div>
+            </div>
+            
+            <div class="success">
+                <div class="callout-title">Key Insight</div>
+                <p>Claude can infer intent, but specificity dramatically improves first-attempt success rates. Include context about:</p>
+                <ul style="margin-top: 1rem; margin-left: 1.5rem;">
+                    <li>What specific functionality you want</li>
+                    <li>Expected behavior and edge cases</li>
+                    <li>Error conditions and responses</li>
+                    <li>Integration points with existing code</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Visual Context -->
+        <div class="slide">
+            <h2>Show, Don't Just Tell</h2>
+            <div class="three-column">
+                <div class="card">
+                    <h4>📸 Screenshots</h4>
+                    <p>Browser states, app interfaces, current UI that needs changes</p>
+                </div>
+                <div class="card">
+                    <h4>🎨 Mockups</h4>
+                    <p>Design files, wireframes, desired end states</p>
+                </div>
+                <div class="card">
+                    <h4>📊 Diagrams</h4>
+                    <p>Architecture flows, user journeys, system interactions</p>
+                </div>
+            </div>
+            
+            <div class="tip">
+                <div class="callout-title">Pro Workflow</div>
+                <p><code>Cmd+Ctrl+Shift+4</code> → <code>Ctrl+V</code> for instant screenshot sharing</p>
+            </div>
+            
+            <div class="comparison" style="margin-top: 2rem;">
+                <div class="comparison-item bad">
+                    <div class="comparison-label">Text Only</div>
+                    <p>"The button should be blue and in the top right"</p>
+                </div>
+                <div class="comparison-item good">
+                    <div class="comparison-label">With Visual</div>
+                    <p>"Make this button blue and move it to match this mockup" + screenshot</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Intermediate Power-Ups -->
+        <div class="slide">
+            <h2>Level Up Your Skills</h2>
+            <div class="three-column">
+                <div class="card">
+                    <h4>🧪 TDD with Claude</h4>
+                    <p>Write tests first, then implement. Claude excels at understanding test requirements and building to spec.</p>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 1rem;">// Write this test first
+test('should validate email format')</div>
+                </div>
+                <div class="card">
+                    <h4>⚡ Custom Commands</h4>
+                    <p>Create reusable patterns for common tasks in your workflow.</p>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 1rem;">/project:fix-gh-issue-simple 123</div>
+                </div>
+                <div class="card">
+                    <h4>🔌 MCP Integration</h4>
+                    <p>Connect external tools as Claude capabilities - databases, APIs, services.</p>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 1rem;"># Access live data
+> Query the production DB</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Multi-Claude Orchestration -->
+        <div class="slide">
+            <h2>Scale with Multiple Agents</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>Parallel Development</h3>
+                    <div class="code-block"># Terminal 1: Primary development
+> Implement user dashboard
+
+# Terminal 2: Code review & testing
+> Review the dashboard code
+> Run comprehensive tests
+
+# Terminal 3: Documentation  
+> Update API docs for new endpoints</div>
+                </div>
+                <div class="column">
+                    <h3>Git Worktrees Pattern</h3>
+                    <div class="code-block">git worktree add ../feature-branch feature
+cd ../feature-branch
+claude  # Separate Claude session
+
+# Work on non-conflicting features
+# simultaneously across worktrees</div>
+                    
+                    <div class="success">
+                        <div class="callout-title">Key Benefit</div>
+                        <p>Simultaneous work on different features without context switching or conflicts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Performance Optimization -->
+        <div class="slide">
+            <h2>Keep Claude Running Smoothly</h2>
+            <div class="three-column">
+                <div class="card">
+                    <h4>🧠 Context Window</h4>
+                    <p>Use <code>/clear</code> frequently to start fresh. Long sessions can degrade performance.</p>
+                    <div class="tip" style="margin-top: 1rem; font-size: 0.9rem;">
+                        <strong>Best Practice:</strong> Clear between major task switches
+                    </div>
+                </div>
+                <div class="card">
+                    <h4>📁 Memory Files</h4>
+                    <p>Modular CLAUDE.md imports vs. massive single files. Keep context focused and relevant.</p>
+                    <div class="code-block" style="font-size: 0.8rem; margin-top: 1rem;"># Good: Focused files
+auth/CLAUDE.md
+api/CLAUDE.md</div>
+                </div>
+                <div class="card">
+                    <h4>💭 Thinking Modes</h4>
+                    <p>Escalate complexity as needed:</p>
+                    <ul style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        <li><code>think</code> - Basic</li>
+                        <li><code>think hard</code> - Complex</li>
+                        <li><code>ultrathink</code> - Advanced</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Common Pitfalls -->
+        <div class="slide">
+            <h2>Avoid These Mistakes</h2>
+            <ul>
+                <li>
+                    <span class="icon">⚠️</span>
+                    <div class="content">
+                        <div class="title">No CLAUDE.md</div>
+                        <div class="description">Create comprehensive project memory files to give Claude context about your codebase, patterns, and preferences.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">⚠️</span>
+                    <div class="content">
+                        <div class="title">Vague Requests</div>
+                        <div class="description">Be specific about functionality, error cases, and integration requirements.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">⚠️</span>
+                    <div class="content">
+                        <div class="title">Missing Visuals</div>
+                        <div class="description">Provide screenshots, mockups, and diagrams to clarify requirements.</div>
+                    </div>
+                </li>
+                <li>
+                    <span class="icon">⚠️</span>
+                    <div class="content">
+                        <div class="title">Monolithic Sessions</div>
+                        <div class="description">Use <code>/clear</code> between major tasks to maintain performance and focus.</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Slide 13: Enterprise & Security -->
+        <div class="slide">
+            <h2>Production-Ready Practices</h2>
+            <div class="two-column">
+                <div class="column">
+                    <h3>🛡️ Security Checklist</h3>
+                    <ul style="list-style: disc; margin-left: 2rem;">
+                        <li>Conservative permission configuration</li>
+                        <li>Audit trail setup and monitoring</li>
+                        <li>Container isolation strategies</li>
+                        <li>Hierarchical settings management</li>
+                        <li>Sensitive data exclusion patterns</li>
+                    </ul>
+                </div>
+                <div class="column">
+                    <h3>Configuration Example</h3>
+                    <div class="code-block"># .claude/settings.json
+{
+  "permissions": {
+    "file_operations": "restricted",
+    "network_access": false,
+    "system_commands": "whitelist"
+  },
+  "audit": {
+    "log_level": "detailed",
+    "retention_days": 90
+  }
+}</div>
+                </div>
+            </div>
+            
+            <div class="warning">
+                <div class="callout-title">Conservative Defaults</div>
+                <p>Claude Code starts with restrictive permissions. Gradually expand access as needed rather than starting permissive.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Advanced Patterns -->
+        <div class="slide">
+            <h2>Expert-Level Orchestration</h2>
+            <div class="workflow-diagram">
+                <div class="workflow-step">
+                    <div class="workflow-icon">🏭</div>
+                    <div class="workflow-title">Feature Factory</div>
+                    <div class="workflow-desc">Boilerplate generation</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">🔍</div>
+                    <div class="workflow-title">Quality Control</div>
+                    <div class="workflow-desc">Automated code review</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">📚</div>
+                    <div class="workflow-title">Documentation Engine</div>
+                    <div class="workflow-desc">Auto-generated docs</div>
+                </div>
+                <div class="workflow-step">
+                    <div class="workflow-icon">🧪</div>
+                    <div class="workflow-title">Test Generator</div>
+                    <div class="workflow-desc">Comprehensive test suites</div>
+                </div>
+            </div>
+            
+            <div class="success">
+                <div class="callout-title">Cross-Repository Coordination</div>
+                <p>Advanced users can coordinate Claude instances across multiple repositories for large-scale refactoring and feature development.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Quick Reference -->
+        <div class="slide">
+            <h2>Essential Commands Cheat Sheet</h2>
+            <div class="cheat-sheet">
+                <div class="cheat-section">
+                    <h4>Interactive Mode</h4>
+                    <div class="cheat-item">
+                        <span class="cheat-key">Ctrl+C</span>
+                        <span class="cheat-desc">Cancel current operation</span>
+                    </div>
+                    <div class="cheat-item">
+                        <span class="cheat-key">Ctrl+D</span>
+                        <span class="cheat-desc">Exit Claude Code</span>
+                    </div>
+                    <div class="cheat-item">
+                        <span class="cheat-key">Escape</span>
+                        <span class="cheat-desc">Interrupt processing</span>
+                    </div>
+                    <div class="cheat-item">
+                        <span class="cheat-key">Double Escape</span>
+                        <span class="cheat-desc">Edit previous message</span>
+                    </div>
+                </div>
+                <div class="cheat-section">
+                    <h4>Key Patterns</h4>
+                    <div class="cheat-item">
+                        <span class="cheat-key">@file.py</span>
+                        <span class="cheat-desc">Reference specific files</span>
+                    </div>
+                    <div class="cheat-item">
+                        <span class="cheat-key">#</span>
+                        <span class="cheat-desc">Quick memory addition</span>
+                    </div>
+                    <div class="cheat-item">
+                        <span class="cheat-key">/command</span>
+                        <span class="cheat-desc">Execute slash commands</span>
+                    </div>
+                    <div class="cheat-item">
+                        <span class="cheat-key">think hard</span>
+                        <span class="cheat-desc">Deep analysis mode</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Next Steps -->
+        <div class="slide">
+            <h2>Your Claude Code Journey Continues</h2>
+            <div class="learning-path">
+                <div class="path-step">
+                    <div class="path-number">1</div>
+                    <div class="path-content">
+                        <div class="path-title">Start with Q&A</div>
+                        <div class="path-desc">Build confidence by exploring your codebase with Claude</div>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="path-number">2</div>
+                    <div class="path-content">
+                        <div class="path-title">Create Comprehensive CLAUDE.md</div>
+                        <div class="path-desc">Document your project's architecture, patterns, and preferences</div>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="path-number">3</div>
+                    <div class="path-content">
+                        <div class="path-title">Practice Specificity</div>
+                        <div class="path-desc">Develop skills in making precise, context-rich requests</div>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="path-number">4</div>
+                    <div class="path-content">
+                        <div class="path-title">Experiment with Visual Context</div>
+                        <div class="path-desc">Use screenshots, mockups, and diagrams to improve results</div>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <div class="path-number">5</div>
+                    <div class="path-content">
+                        <div class="path-title">Scale to Multi-Claude Patterns</div>
+                        <div class="path-desc">Orchestrate multiple agents for complex workflows</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="success" style="margin-top: 2rem; text-align: center;">
+                <div class="callout-title">The Future of Coding is Agentic</div>
+                <p>Explore it today with Claude Code!</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">16</span>
+    </div>
+    
+    <div class="navigation-hint">
+        Use ← → arrows, spacebar, or click to navigate
+    </div>
+
+    <script>
+        // Presentation state
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const progressFill = document.querySelector('.progress-fill');
+        const currentSlideSpan = document.getElementById('current-slide');
+        const totalSlidesSpan = document.getElementById('total-slides');
+
+        // Initialize
+        totalSlidesSpan.textContent = totalSlides;
+        updateProgress();
+
+        // Navigation functions
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            updateProgress();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function updateProgress() {
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            progressFill.style.width = progress + '%';
+            currentSlideSpan.textContent = currentSlide + 1;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                case ' ':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    showSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    showSlide(totalSlides - 1);
+                    break;
+                case 'Escape':
+                    e.preventDefault();
+                    showSlide(0);
+                    break;
+            }
+        });
+
+        // Click navigation
+        document.addEventListener('click', (e) => {
+            const rect = window.innerWidth;
+            if (e.clientX > rect / 2) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        });
+
+        // Prevent context menu on right click
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+
+        // Touch navigation for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+
+        // Auto-hide navigation hint after 5 seconds
+        setTimeout(() => {
+            const hint = document.querySelector('.navigation-hint');
+            hint.style.opacity = '0';
+        }, 5000);
+    </script>
+</body>
+</html>
